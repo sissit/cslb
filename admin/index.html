@@ -58,11 +58,12 @@
     <div class="filters tabs" role="tablist"><button class="chip" data-tab="traffic" role="tab">流量</button><button class="chip" data-tab="fb" role="tab">意见 <small id="fbcount"></small></button><button class="chip" data-tab="guide" role="tab">申请指南</button></div>
     <section id="traffic">
       <div class="cards" id="cards"></div>
-      <h3>最近 30 天</h3>
-      <p class="small">红柱为浏览量，深色线为访客数（美国中部时间）。鼠标移到柱子上看具体数字。</p>
+      <div class="filters" id="ranges" style="margin-top:0"></div>
+      <h3 id="rtitle"></h3>
+      <p class="small">红柱为浏览量，深色线为访客数（美国中部时间）。鼠标移到柱子上看具体数字。<span id="bucket"></span></p>
       <div class="chart" id="chart"></div><div class="axis" id="axis"></div>
       <div class="grid" id="tables"></div>
-      <h3 style="margin-top:28px">访问记录（最近 30 天，最多 300 次）</h3>
+      <h3 style="margin-top:28px" id="vtitle"></h3>
       <p class="small">一次访问 = 同一浏览器 30 分钟内连续的浏览。灰色块是看过的页面和停留时间，红框是操作。点“第 N 次访问”只看这位访客。</p>
       <div class="filters" id="vfilters"></div>
       <div id="visits"></div>
@@ -81,9 +82,9 @@ const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>(
 const Q=Object.fromEntries((window.QUESTIONS||[]).map(q=>[q.id,q]));
 const KIND={question:'题目有误',site:'网站问题',idea:'建议'},ST={new:'待处理',done:'已处理',ignored:'忽略'},LANG={zh:'中文',en:'英文',es:'西语'};
 const PG={index:'首页',practice:'章节练习',exam:'模拟考试',notes:'知识点讲义',guide:'申请指南'};
-let pw=sessionStorage.getItem('cslb-admin')||'',data=null,filter='new';
+let range=sessionStorage.getItem('cslb-admin-range')||'30',pw=sessionStorage.getItem('cslb-admin')||'',data=null,filter='new';
 async function api(method,body){
-  const r=await fetch('/api/admin',{method,headers:{'x-admin-password':pw,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  const r=await fetch(method==='GET'?'/api/admin?range='+range:'/api/admin',{method,headers:{'x-admin-password':pw,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
   if(r.status===401){sessionStorage.removeItem('cslb-admin');showLogin('密码不对');throw 0}
   if(!r.ok)throw new Error('server');return r.json();
 }
@@ -96,6 +97,8 @@ const PAPER={law:'法律与商务',b:'B 类专业',all:'两门混合','':'未知
 const DEV={mobile:'手机',desktop:'电脑',tablet:'平板','':'未知'};
 const REF=k=>k===''?'直接访问 / 书签':k==='internal'?'站内跳转':k;
 const REG=k=>{if(!k)return '未知';const [c,r]=k.split('-');const C={US:'美国',CN:'中国',CA:'加拿大',MX:'墨西哥',TW:'台湾',HK:'香港'}[c]||c;return r?`${C} · ${r}`:C};
+const RANGES=[['30','30 天'],['90','90 天'],['180','半年'],['365','一年'],['all','全部']];
+const RL=()=>range==='all'?'全部':'最近 '+(RANGES.find(r=>r[0]===range)||[,'30 天'])[1];
 let tab=sessionStorage.getItem('cslb-admin-tab')||'traffic',vf='all';
 const TOP=window.TOPICS||{};
 const EVN={lang:'切换语言',feedback:'提交意见',practice:'练习完成',practice_start:'开始练习',exam_start:'开始模拟考试',out:'点击外链',exam:'模拟考试交卷'};
@@ -130,18 +133,25 @@ function render(){
   const pending=data.feedback.filter(f=>f.status==='new').length;$('#fbcount').textContent=pending||'';
   const v=data.visitors;
   const nr=data.nr||{};
-  $('#cards').innerHTML=[['今天',data.today,v.today,'today'],['最近 7 天',data.week,v.week,'week'],['最近 30 天',data.month,v.month,'month'],['累计',data.total,v.total,'total']].map(([k,n,u,p])=>`<div class="card"><span>${k}</span><b>${n}</b><small>浏览 · 访客 ${u}</small><small>新访客 ${nr['new_'+p]||0} · 回访 ${nr['ret_'+p]||0}</small></div>`).join('');
-  const byDay=Object.fromEntries(data.days.map(d=>[d.day,d])),slots=[];
+  $('#cards').innerHTML=[['今天',data.today,v.today,'today'],['最近 7 天',data.week,v.week,'week'],[RL(),data.rangeHits,data.rangeVis,'range'],['累计',data.total,v.total,'total']].map(([k,n,u,p])=>`<div class="card"><span>${k}</span><b>${n}</b><small>浏览 · 访客 ${u}</small><small>新访客 ${nr['new_'+p]||0} · 回访 ${nr['ret_'+p]||0}</small></div>`).join('');
+  $('#ranges').innerHTML=RANGES.map(([k,n])=>`<button class="chip" data-r="${k}" aria-pressed="${range===k}">${n}</button>`).join('');
+  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{range=b.dataset.r;sessionStorage.setItem('cslb-admin-range',range);vf='all';load()});
+  $('#rtitle').textContent=RL();$('#vtitle').textContent=`访问记录（${RL()}，最多 500 次）`;
+  const byDay=Object.fromEntries(data.days.map(d=>[d.day,d])),ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   const today=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Chicago'}));
-  for(let k=29;k>=0;k--){const d=new Date(today);d.setDate(d.getDate()-k);const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');const o=byDay[key]||{n:0,v:0};slots.push([key,o.n,o.v||0])}
+  let span=range==='all'?(data.days.length?Math.ceil((today-new Date(data.days[0].day+'T00:00'))/864e5)+1:30):+range;span=Math.max(span,1);
+  const size=span<=90?1:span<=400?7:30,unit={1:'天',7:'周',30:'月'}[size];
+  $('#bucket').textContent=size>1?` 每根柱子为一${unit}（访客数为每日访客之和）。`:'';
+  const slots=[];
+  for(let k=span-1;k>=0;k-=size){let n=0,u=0,first='';for(let j=k;j>k-size&&j>=0;j--){const d=new Date(today);d.setDate(d.getDate()-j);const key=ymd(d);if(!first)first=key;const o=byDay[key];if(o){n+=o.n;u+=o.v||0}}slots.push([first,n,u])}
   const max=Math.max(1,...slots.map(s=>s[1]));
-  $('#chart').innerHTML=slots.map(([d,n,u])=>`<i class="${n?'':'z'}" style="height:${n/max*100}%" data-t="${d.slice(5)}：浏览 ${n} · 访客 ${u}">${n&&u?`<b style="bottom:${u/n*100}%"></b>`:''}</i>`).join('');
-  $('#axis').innerHTML=`<span>${slots[0][0].slice(5)}</span><span>今天</span>`;
+  $('#chart').innerHTML=slots.map(([d,n,u])=>`<i class="${n?'':'z'}" style="height:${n/max*100}%" data-t="${d.slice(span>365?0:5)}${size>1?' 起':''}：浏览 ${n} · 访客 ${u}">${n&&u?`<b style="bottom:${Math.min(u/n,1)*100}%"></b>`:''}</i>`).join('');
+  $('#axis').innerHTML=`<span>${slots[0][0].slice(span>365?0:5)}</span><span>今天</span>`;
   const hrs=Array.from({length:24},(_,h)=>({k:`${String(h).padStart(2,'0')}:00`,n:(data.hours.find(x=>x.h===h)||{n:0}).n})).filter(r=>r.n);
   $('#tables').innerHTML=[
     kv('来源网站',data.refs,REF),kv('城市（访客数）',data.cities||[],CITY),kv('地区',data.regions,REG),kv('设备',data.devices,k=>DEV[k]||k),
-    kv('网站语言',data.langs,k=>LANG[k]||'未知'),kv('页面（最近 30 天）',data.pages,k=>PG[k]||k),kv('页面（累计）',data.allPages,k=>PG[k]||k),
-    kv('访问时段（中部时间）',hrs),kv('操作（最近 30 天）',data.evs||[],k=>EVN[k]||k),
+    kv('网站语言',data.langs,k=>LANG[k]||'未知'),kv('页面（'+RL()+'）',data.pages,k=>PG[k]||k),kv('页面（累计）',data.allPages,k=>PG[k]||k),
+    kv('访问时段（中部时间）',hrs),kv('操作（'+RL()+'）',data.evs||[],k=>EVN[k]||k),
     `<div><h3>模拟考试交卷</h3>${data.exams.length?`<table class="kv"><tr><td class="small">试卷</td><td class="n small">次数</td><td class="n small">平均分</td><td class="n small">通过率</td></tr>${data.exams.map(e=>`<tr><td>${PAPER[e.paper]||e.paper}</td><td class="n">${e.n}</td><td class="n">${e.avg}%</td><td class="n">${e.pass}%</td></tr>`).join('')}</table><p class="small">通过线按 72% 计。</p>`:'<p class="small">还没有人交卷</p>'}</div>`
   ].join('');
   const VS=data.visits||[],vlist=VS.filter(x=>vf==='all'||(vf==='new'?x.prior===0:vf==='ret'?x.prior>0:x.vid===vf));
