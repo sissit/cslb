@@ -4,9 +4,11 @@ const store={
   get(k,d){try{const v=localStorage.getItem('cslb-'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem('cslb-'+k,JSON.stringify(v))}catch(e){}}
 };
-const lang=store.get('lang','zh')==='en'?'en':'zh';
-const EN=lang==='en';
-document.documentElement.lang=EN?'en':'zh-CN';
+const lang=['en','es'].includes(store.get('lang','zh'))?store.get('lang','zh'):'zh';
+const EN=lang==='en',ES=lang==='es';
+document.documentElement.lang={zh:'zh-CN',en:'en',es:'es'}[lang];
+/* Spanish: swap in Spanish translation and explanation */
+if(ES&&window.QUESTIONS&&window.QUESTIONS_ES){window.QUESTIONS.forEach(q=>{const e=window.QUESTIONS_ES[q.id];if(!e)return;q.z=e[0];q.o=q.o.map((o,i)=>[o[0],e[1][i]||'']);q.e=e[2]})}
 
 const S={
   zh:{brand:'CSLB 备考',nav:['首页','章节练习','模拟考试','知识点讲义','申请指南'],sw:'EN',swl:'Switch to English',navl:'主导航',
@@ -26,7 +28,16 @@ const S={
     yes:'Submit',no:'Keep working',timeup:'Time’s up',done:'Submitted',yours:'Your score',score:(r,n)=>`${r} of ${n} correct`,
     pass:'At or above the ~72% reference passing mark',fail:'Below the ~72% reference passing mark',
     barnote:'The red line marks the ~72% reference passing mark (from public prep sources; your exam notice governs). Missed questions were added to your review list.',
-    review:'Review missed questions',src:'Source',your:'Your answer: ',none:'blank',right2:'Correct: ',all:'All correct.',again:'Try again',towrong:'Review list',qlabel:k=>`Question ${k}`}
+    review:'Review missed questions',src:'Source',your:'Your answer: ',none:'blank',right2:'Correct: ',all:'All correct.',again:'Try again',towrong:'Review list',qlabel:k=>`Question ${k}`},
+  es:{brand:'CSLB Prep',nav:['Inicio','Práctica','Examen de prueba','Apuntes','Guía de licencia'],navl:'Principal',
+    foot1:'Sitio de estudio independiente, sin relación con la Junta Estatal de Licencias de Contratistas de California (CSLB). Las preguntas son de práctica, escritas a partir de leyes públicas; no son preguntas reales del examen. Datos vigentes a 2026. Para solicitudes y exámenes oficiales, consulte <a href="https://www.cslb.ca.gov">cslb.ca.gov</a>. Nada aquí es asesoría legal.',
+    foot2:'Código MIT · Preguntas y apuntes CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">Código en GitHub</a>',
+    law:'Leyes y Negocios',b:'Construcción General (B)',qn:(i,n)=>`Pregunta ${i} de ${n}`,answered:n=>`${n} respondidas`,prev:'Anterior',next:'Siguiente',result:'Ver resultado',
+    right:'Correcto',correct:l=>'Respuesta: '+l,flag:'Marcar',unflag:'Desmarcar',submit:'Entregar',confirm:n=>`${n?`${n} sin responder. `:''}¿Entregar el examen?`,
+    yes:'Entregar',no:'Seguir',timeup:'Se acabó el tiempo',done:'Entregado',yours:'Su resultado',score:(r,n)=>`${r} de ${n} correctas`,
+    pass:'Igual o arriba de la nota de referencia de ~72%',fail:'Abajo de la nota de referencia de ~72%',
+    barnote:'La línea roja marca la nota de referencia de ~72% (de fuentes públicas de estudio; manda el aviso de su examen). Las preguntas falladas se guardaron en su lista de repaso.',
+    review:'Repaso de preguntas falladas',src:'Fuente',your:'Su respuesta: ',none:'en blanco',right2:'Correcta: ',all:'Todas correctas.',again:'Otra vez',towrong:'Lista de repaso',qlabel:k=>`Pregunta ${k}`}
 };
 const t=S[lang];
 const PAGES=['index.html','practice.html','exam.html','notes.html','guide.html'];
@@ -37,21 +48,21 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(h){
     h.innerHTML=`<div class="wrap"><a class="mark" href="index.html"><i></i><span>${t.brand}</span></a>
       <nav class="nav" aria-label="${t.navl}">${PAGES.map((u,k)=>`<a href="${u}"${here===u?' aria-current="page"':''}>${t.nav[k]}</a>`).join('')}</nav>
-      <button class="lang" id="lang" aria-label="${t.swl}">${t.sw}</button></div>`;
-    document.getElementById('lang').onclick=()=>{store.set('lang',EN?'zh':'en');location.reload()};
+      <div class="langs" role="group" aria-label="Language">${[['zh','中文'],['en','EN'],['es','ES']].map(([k,n])=>`<button class="lang" data-lang="${k}" aria-pressed="${lang===k}">${n}</button>`).join('')}</div></div>`;
+    h.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{store.set('lang',b.dataset.lang);location.reload()});
   }
   for(const c of document.querySelectorAll('.stack td')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;const hd=c.closest('table').rows[0].cells[i];c.dataset.l=hd?hd.innerText.trim():''}
   const f=document.getElementById('foot');
   if(f)f.innerHTML=`<div class="wrap"><p>${t.foot1}</p><p>${t.foot2}</p></div>`;
-  const tt=document.querySelector('meta[name=title-en]');if(EN&&tt)document.title=tt.content;
+  const tt=document.querySelector(`meta[name=title-${lang}]`);if(lang!=='zh'&&tt)document.title=tt.content;
 });
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const L='ABCD';
-const topicName=q=>((EN?window.TOPICS_EN:window.TOPICS)[q.x]||{})[q.t]||'';
+const topicName=q=>((EN?window.TOPICS_EN:ES?window.TOPICS_ES:window.TOPICS)[q.x]||{})[q.t]||'';
 const examName=x=>x==='law'?t.law:t.b;
 const expl=q=>EN?q.ee:q.e;
-const srcHTML=q=>q.s?`<span class="src">${t.src}${EN?': ':'：'}<a href="${esc(q.s[1])}" target="_blank" rel="noopener">${esc(q.s[0])}</a></span>`:'';
+const srcHTML=q=>q.s?`<span class="src">${t.src}${lang==='zh'?'：':': '}<a href="${esc(q.s[1])}" target="_blank" rel="noopener">${esc(q.s[0])}</a></span>`:'';
 function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a}
 /* shuffle answer choices so the correct letter varies */
 function mix(list){return list.map(q=>{const idx=shuffle([0,1,2,3]);return Object.assign({},q,{o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a)})})}
@@ -68,7 +79,7 @@ function bindZh(){
 function optsHTML(x,picked,reveal){
   return `<ol class="opts">${x.o.map((o,k)=>{let c='opt';
     if(reveal){if(k===x.a)c+=' right';else if(k===picked)c+=' wrong'}else if(k===picked)c+=' pick';
-    return `<li><button class="${c}" data-k="${k}" ${reveal?'disabled':''}><span class="bub">${L[k]}</span><span>${esc(o[0])}<span class="ozh">${esc(o[1])}</span></span></button></li>`}).join('')}</ol>`;
+    return `<li><button class="${c}" data-k="${k}" ${reveal?'disabled':''}><span class="bub">${L[k]}</span><span>${esc(o[0])}${o[1]?`<span class="ozh">${esc(o[1])}</span>`:''}</span></button></li>`}).join('')}</ol>`;
 }
 
 function results(el,list,ans,again){
@@ -138,5 +149,5 @@ function exam(el,list,minutes,timerEl){
   clearInterval(tid);timerEl.textContent=fmt(left);tid=setInterval(tick,1000);show();
 }
 
-window.CSLB={store,esc,shuffle,wrongSet,practice,exam,bindZh,examName,topicName,EN,lang};
+window.CSLB={store,esc,shuffle,wrongSet,practice,exam,bindZh,examName,topicName,EN,ES,lang};
 })();

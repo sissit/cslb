@@ -108,12 +108,15 @@ ol.steps{padding-inline-start:22px}ol.steps li{margin-bottom:10px}
 .foot .wrap{padding-block:22px;font-size:13px;color:var(--mute)}
 .foot p{margin:4px 0}
 @media(prefers-reduced-motion:reduce){.prog i{transition:none}.sheet .fill{animation:none!important}}
-@media(max-width:760px){.hero{grid-template-columns:minmax(0,1fr)}.mark{width:100%}.top{position:static}}
+@media(max-width:760px){.hero{grid-template-columns:minmax(0,1fr)}.top{position:static}}
 @media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--rule)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:7em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:6.5em;margin-inline-start:-7em;color:var(--mute);white-space:normal}.stack td:empty{display:none}}
 /* language */
-html[lang=en] .l-zh{display:none!important}
+html:not([lang^=zh]) .l-zh{display:none!important}
 html:not([lang=en]) .l-en{display:none!important}
+html:not([lang=es]) .l-es{display:none!important}
+.langs{display:flex;gap:4px}
+.lang[aria-pressed=true]{background:var(--ink);color:var(--bg)}
 .lang{min-height:40px;min-width:52px;padding:0 12px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);font:600 14px var(--sans);cursor:pointer}
 .lang:focus-visible{outline:3px solid var(--slate);outline-offset:2px}
-@media(max-width:760px){.lang{position:absolute;top:10px;right:max(5vw,16px)}.top .wrap{position:relative}}
+@media(max-width:760px){.top .mark{width:auto;order:0}.langs{order:1}.nav{order:2;width:100%}}
 .src{display:block;margin-top:8px;font-size:13px;color:var(--mute)}
