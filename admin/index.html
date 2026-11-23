@@ -12,8 +12,9 @@
 .ad header h1{margin:0;margin-inline-end:auto;font:600 24px/1.2 var(--serif)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
 .card{border:1px solid var(--rule);padding:14px}.card b{display:block;font:600 28px/1.1 var(--serif)}.card span{font-size:13px;color:var(--mute)}
-.chart{display:flex;align-items:flex-end;gap:3px;height:120px;border-bottom:1px solid var(--rule);margin:8px 0 4px}
-.chart i{flex:1;background:var(--red);min-height:1px;position:relative}
+.chart{display:flex;align-items:flex-end;gap:4px;height:120px;border-bottom:1px solid var(--rule);margin:8px 0 4px}
+.axis{display:flex;justify-content:space-between;font-size:12px;color:var(--mute);margin-bottom:16px}
+.chart i{flex:1;max-width:28px;background:var(--red);position:relative}.chart i.z{background:var(--rule);height:2px!important}
 .chart i:hover::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font:12px var(--sans);background:var(--ink);color:var(--bg);padding:2px 6px}
 .filters{display:flex;gap:6px;flex-wrap:wrap;margin:24px 0 12px}
 .item{border:1px solid var(--rule);padding:14px;margin-bottom:12px}
@@ -24,6 +25,7 @@
 .qref{background:var(--panel);padding:10px;font-size:14px;margin:8px 0}
 .item textarea{width:100%;font:14px/1.4 var(--sans);padding:6px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);box-sizing:border-box}
 .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.acts .btn{min-height:36px;padding:6px 12px;font-size:14px}
+[hidden]{display:none!important}
 #login{max-width:360px;margin:12vh auto;display:grid;gap:12px}
 #login input{font:16px var(--sans);padding:10px;border:1px solid var(--rule);background:var(--bg);color:var(--ink)}
 table.pages{border-collapse:collapse;font-size:14px}table.pages td{padding:4px 16px 4px 0}
@@ -42,7 +44,7 @@ table.pages{border-collapse:collapse;font-size:14px}table.pages td{padding:4px 1
     <h2>浏览量</h2>
     <div class="cards" id="cards"></div>
     <p class="small">最近 30 天每日浏览量（美国中部时间），只统计次数，不记录访客信息。</p>
-    <div class="chart" id="chart"></div>
+    <div class="chart" id="chart"></div><div class="axis" id="axis"></div>
     <table class="pages" id="pages"></table>
     <h2>意见</h2>
     <div class="filters" id="filters"></div>
@@ -69,8 +71,12 @@ async function load(){
 function render(){
   const pending=data.feedback.filter(f=>f.status==='new').length;
   $('#cards').innerHTML=[['今天',data.today],['最近 7 天',data.week],['累计',data.total],['待处理意见',pending]].map(([k,v])=>`<div class="card"><b>${v}</b><span>${k}</span></div>`).join('');
-  const max=Math.max(1,...data.days.map(d=>d.n));
-  $('#chart').innerHTML=data.days.map(d=>`<i style="height:${d.n/max*100}%" data-t="${d.day.slice(5)}：${d.n}"></i>`).join('')||'<span class="small">还没有数据</span>';
+  const byDay=Object.fromEntries(data.days.map(d=>[d.day,d.n])),slots=[];
+  const today=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Chicago'}));
+  for(let k=29;k>=0;k--){const d=new Date(today);d.setDate(d.getDate()-k);const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');slots.push([key,byDay[key]||0])}
+  const max=Math.max(1,...slots.map(s=>s[1]));
+  $('#chart').innerHTML=slots.map(([d,n])=>`<i class="${n?'':'z'}" style="height:${n/max*100}%" data-t="${d.slice(5)}：${n}"></i>`).join('');
+  $('#axis').innerHTML=`<span>${slots[0][0].slice(5)}</span><span>今天</span>`;
   $('#pages').innerHTML=data.pages.map(p=>`<tr><td>${PG[p.page]||esc(p.page)}</td><td>${p.n}</td></tr>`).join('');
   const cnt=s=>data.feedback.filter(f=>s==='all'||f.status===s).length;
   $('#filters').innerHTML=[['new','待处理'],['done','已处理'],['ignored','忽略'],['all','全部']].map(([k,n])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${n} <small>${cnt(k)}</small></button>`).join('');
