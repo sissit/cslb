@@ -17,7 +17,7 @@ const S={
     yes:'确定交卷',no:'继续答题',timeup:'时间到',done:'已交卷',yours:'你的成绩',score:(r,n)=>`${r} / ${n} 题答对`,
     pass:'达到约 72% 的参考及格线',fail:'未达约 72% 的参考及格线',
     barnote:'红线为约 72% 的参考及格线（来自公开备考资料，实际以考试通知为准）。答错的题已加入错题本。',
-    review:'错题回顾',your:'你的答案：',none:'未作答',right2:'正确：',all:'全部答对。',again:'再来一次',towrong:'去错题本',qlabel:k=>`第 ${k} 题`},
+    review:'错题回顾',src:'出处',your:'你的答案：',none:'未作答',right2:'正确：',all:'全部答对。',again:'再来一次',towrong:'去错题本',qlabel:k=>`第 ${k} 题`},
   en:{brand:'CSLB Prep',nav:['Home','Practice','Mock exam','Study notes','License guide'],sw:'中文',swl:'切换到中文',navl:'Main',
     foot1:'An independent study site, not affiliated with the California Contractors State License Board (CSLB). Questions are original practice items written from public law, not actual CSLB exam questions; figures are as of 2026. For official applications and exams, rely on <a href="https://www.cslb.ca.gov">cslb.ca.gov</a>. Nothing here is legal advice.',
     foot2:'Code MIT · Questions and notes CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">Source on GitHub</a>',
@@ -26,7 +26,7 @@ const S={
     yes:'Submit',no:'Keep working',timeup:'Time’s up',done:'Submitted',yours:'Your score',score:(r,n)=>`${r} of ${n} correct`,
     pass:'At or above the ~72% reference passing mark',fail:'Below the ~72% reference passing mark',
     barnote:'The red line marks the ~72% reference passing mark (from public prep sources; your exam notice governs). Missed questions were added to your review list.',
-    review:'Review missed questions',your:'Your answer: ',none:'blank',right2:'Correct: ',all:'All correct.',again:'Try again',towrong:'Review list',qlabel:k=>`Question ${k}`}
+    review:'Review missed questions',src:'Source',your:'Your answer: ',none:'blank',right2:'Correct: ',all:'All correct.',again:'Try again',towrong:'Review list',qlabel:k=>`Question ${k}`}
 };
 const t=S[lang];
 const PAGES=['index.html','practice.html','exam.html','notes.html','guide.html'];
@@ -51,6 +51,7 @@ const L='ABCD';
 const topicName=q=>((EN?window.TOPICS_EN:window.TOPICS)[q.x]||{})[q.t]||'';
 const examName=x=>x==='law'?t.law:t.b;
 const expl=q=>EN?q.ee:q.e;
+const srcHTML=q=>q.s?`<span class="src">${t.src}${EN?': ':'：'}<a href="${esc(q.s[1])}" target="_blank" rel="noopener">${esc(q.s[0])}</a></span>`:'';
 function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a}
 /* shuffle answer choices so the correct letter varies */
 function mix(list){return list.map(q=>{const idx=shuffle([0,1,2,3]);return Object.assign({},q,{o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a)})})}
@@ -78,7 +79,7 @@ function results(el,list,ans,again){
   <p class="verdict">${t.score(right,n)} · ${pct>=72?t.pass:t.fail}</p>
   <div class="bars">${Object.entries(groups).map(([g,o])=>{const p=Math.round(o.r/o.n*100);return `<div class="bar"><div class="lab"><span>${g}</span><span>${o.r}/${o.n} · ${p}%</span></div><div class="meter" aria-hidden="true"><i style="width:${p}%"></i><b style="left:72%"></b></div></div>`}).join('')}</div>
   <p class="small">${t.barnote}</p>
-  ${wrong.length?`<h2>${t.review}</h2>${wrong.map(o=>`<div class="rv"><p><b>${esc(o.x.q)}</b></p><p class="zh" style="margin:0">${esc(o.x.z)}</p><p>${t.your}${ans[o.k]===null?t.none:L[ans[o.k]]} · ${t.right2}${L[o.x.a]}. ${esc(o.x.o[o.x.a][0])}<span class="ozh">${esc(o.x.o[o.x.a][1])}</span></p><p class="small" style="margin:0">${esc(expl(o.x))}</p></div>`).join('')}`:`<p>${t.all}</p>`}
+  ${wrong.length?`<h2>${t.review}</h2>${wrong.map(o=>`<div class="rv"><p><b>${esc(o.x.q)}</b></p><p class="zh" style="margin:0">${esc(o.x.z)}</p><p>${t.your}${ans[o.k]===null?t.none:L[ans[o.k]]} · ${t.right2}${L[o.x.a]}. ${esc(o.x.o[o.x.a][0])}<span class="ozh">${esc(o.x.o[o.x.a][1])}</span></p><p class="small" style="margin:0">${esc(expl(o.x))} ${srcHTML(o.x)}</p></div>`).join('')}`:`<p>${t.all}</p>`}
   <div class="qnav"><button class="btn pri" id="again">${t.again}</button><a class="btn" href="practice.html#wrong">${t.towrong}</a></div></div>`;
   document.getElementById('again').onclick=again;
   window.scrollTo({top:0});
@@ -95,7 +96,7 @@ function practice(el,list,onEmpty){
     if(pg)pg.style.width=(ans.filter(v=>v!==null).length/list.length*100)+'%';
     el.innerHTML=`<div class="meta"><span>${t.qn(i+1,list.length)}</span><span class="tag">${examName(x.x)} · ${topicName(x)}</span></div>
     <div class="qcard"><p class="q">${esc(x.q)}</p><p class="zh">${esc(x.z)}</p>${optsHTML(x,p,done)}
-    ${done?`<div class="exp"><b>${p===x.a?t.right:t.correct(L[x.a])}</b>${esc(expl(x))}</div>`:''}
+    ${done?`<div class="exp"><b>${p===x.a?t.right:t.correct(L[x.a])}</b>${esc(expl(x))}${srcHTML(x)}</div>`:''}
     <div class="qnav"><button class="btn" id="prev" ${i===0?'disabled':''}>${t.prev}</button><button class="btn pri" id="next" ${done?'':'disabled'}>${i===list.length-1?t.result:t.next}</button></div></div>`;
     el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ans[i]=+b.dataset.k;markWrong(x.id,ans[i]!==x.a);show();document.getElementById('next').focus()});
     document.getElementById('prev').onclick=()=>{i--;show()};

@@ -116,3 +116,4 @@ html:not([lang=en]) .l-en{display:none!important}
 .lang{min-height:40px;min-width:52px;padding:0 12px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);font:600 14px var(--sans);cursor:pointer}
 .lang:focus-visible{outline:3px solid var(--slate);outline-offset:2px}
 @media(max-width:760px){.lang{position:absolute;top:10px;right:max(5vw,16px)}.top .wrap{position:relative}}
+.src{display:block;margin-top:8px;font-size:13px;color:var(--mute)}

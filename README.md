@@ -39,3 +39,7 @@ content/questions.js                  题库数据（window.QUESTIONS）
 - 题库与讲义文字：CC BY-NC-SA 4.0（见 `content/LICENSE`）
 
 本项目与加州承包商执照委员会（CSLB）无关。题目为根据公开法规原创编写的练习题，不是 CSLB 真题；正式信息以 [cslb.ca.gov](https://www.cslb.ca.gov) 为准，不构成法律意见。
+
+## 审核
+
+`content/review/review-all.csv` 是全部题目的审核表（英文题干、正确答案、解析、出处），请持证承包商逐题填写 Reviewer OK 和意见。每加一批题都重新生成。
