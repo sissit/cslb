@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模拟考试 · CSLB 备考</title>
+<meta name="description" content="CSLB 法律与商务、B 类总包限时模拟考试，中英对照，交卷后按章节出分。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header id="top" class="top"></header>
+<main class="wrap narrow band">
+  <h1>模拟考试</h1>
+  <div id="setup">
+    <p class="lead">和真实考试一样：限时、交卷前不显示答案，可以跳题和标记。按每题约 2 分钟计时。</p>
+    <div class="label">选择试卷</div>
+    <div class="chips" id="papers"></div>
+    <div class="row"><label class="chk"><input type="checkbox" data-zh>中文对照</label></div>
+    <p id="info" class="small"></p>
+    <button class="btn pri" id="go">开始考试</button>
+    <div class="note">真实考试：两门分开考，每门最长约 3.5 小时，全部为英文（或西班牙语）四选一题。题数、时间和及格线以 CSLB 考试通知为准。</div>
+  </div>
+  <div id="run" hidden>
+    <div class="meta" style="align-items:center"><span id="pname"></span><span class="timer" id="timer" aria-live="off"></span></div>
+    <div class="prog"><i id="pg" style="width:0"></i></div>
+    <section id="app"></section>
+  </div>
+</main>
+<footer id="foot" class="foot"></footer>
+<script src="content/questions.js"></script>
+<script src="assets/app.js"></script>
+<script>
+{
+const {store,shuffle,exam,bindZh}=window.CSLB,Q=window.QUESTIONS;
+const P=[['law','法律与商务'],['b','B 类专业'],['all','综合（两门混合）']];
+let pick=store.get('e-paper','law');
+const list=k=>Q.filter(q=>k==='all'||q.x===k);
+function draw(){
+  document.getElementById('papers').innerHTML=P.map(([k,n])=>`<button class="chip" data-p="${k}" aria-pressed="${pick===k}">${n}<small>${list(k).length} 题</small></button>`).join('');
+  document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{pick=b.dataset.p;store.set('e-paper',pick);draw()});
+  const n=list(pick).length;
+  document.getElementById('info').textContent=`${n} 题，限时 ${n*2} 分钟。`;
+}
+document.getElementById('go').onclick=()=>{
+  const qs=shuffle(list(pick));
+  document.getElementById('setup').hidden=true;document.getElementById('run').hidden=false;
+  document.getElementById('pname').textContent=P.find(p=>p[0]===pick)[1];
+  exam(document.getElementById('app'),qs,qs.length*2,document.getElementById('timer'));
+  window.scrollTo({top:0});
+};
+bindZh();draw();
+}
+</script>
+</body>
+</html>
