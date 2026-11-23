@@ -1,4 +1,4 @@
-// node scripts/check.js — validates content/questions.js
+// node scripts/check.cjs — validates content/questions.js
 const fs=require('fs'),vm=require('vm'),path=require('path');
 const ctx={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'..','content','questions.js'),'utf8'),ctx);
 const {QUESTIONS:Q,TOPICS:T}=ctx.window;let bad=0;const ids=new Set();

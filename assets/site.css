@@ -122,3 +122,15 @@ html:not([lang=es]) .l-es{display:none!important}
 .src{display:block;margin-top:8px;font-size:13px;color:var(--mute)}
 
 ul.links{columns:2;column-gap:32px;padding-inline-start:18px}ul.links li{break-inside:avoid;margin-bottom:6px}@media(max-width:600px){ul.links{columns:1}}
+
+/* feedback */
+.fbbtn{position:fixed;right:16px;bottom:16px;z-index:20;background:var(--red);color:#fff;border:0;border-radius:999px;padding:10px 18px;min-height:44px;font:600 15px/1 var(--sans);box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+.fbq{background:none;border:0;padding:0;color:var(--mute);text-decoration:underline;font:inherit;cursor:pointer}
+.fbdlg{border:1px solid var(--rule);background:var(--bg);color:var(--ink);padding:0;width:min(480px,calc(100vw - 32px))}
+.fbdlg::backdrop{background:rgba(0,0,0,.45)}
+.fbform{padding:20px;display:grid;gap:12px}.fbform h2{margin:0}
+.fbform label{display:grid;gap:4px;font-size:14px;color:var(--mute)}
+.fbform select,.fbform input,.fbform textarea{font:16px/1.4 var(--sans);padding:8px;border:1px solid var(--rule);background:var(--bg);color:var(--ink)}
+.fbform .hp{position:absolute;left:-9999px;width:1px;height:1px}
+.fbmsg{margin:0;font-size:14px;min-height:1em}
+@media print{.fbbtn{display:none}}

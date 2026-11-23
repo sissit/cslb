@@ -12,7 +12,7 @@ A free California contractor license (CSLB) study site in English, Chinese and S
 
 ## 添加题目
 
-在 `content/questions.js` 加题，在 `content/questions.es.js` 按题号加西语，然后运行 `node scripts/check.js` 检查。格式参照文件里已有的题目，每题都要写出处。
+在 `content/questions.js` 加题，在 `content/questions.es.js` 按题号加西语，然后运行 `node scripts/check.cjs` 检查。格式参照文件里已有的题目，每题都要写出处。
 
 发现错误欢迎提 [Issue](https://github.com/sissit/cslb/issues)。
 

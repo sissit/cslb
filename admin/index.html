@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>后台 · CSLB 备考</title>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.ad{max-width:1000px;margin:0 auto;padding:24px 16px 80px}
+.ad header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.ad header h1{margin:0;margin-inline-end:auto;font:600 24px/1.2 var(--serif)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.card{border:1px solid var(--rule);padding:14px}.card b{display:block;font:600 28px/1.1 var(--serif)}.card span{font-size:13px;color:var(--mute)}
+.chart{display:flex;align-items:flex-end;gap:3px;height:120px;border-bottom:1px solid var(--rule);margin:8px 0 4px}
+.chart i{flex:1;background:var(--red);min-height:1px;position:relative}
+.chart i:hover::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font:12px var(--sans);background:var(--ink);color:var(--bg);padding:2px 6px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:24px 0 12px}
+.item{border:1px solid var(--rule);padding:14px;margin-bottom:12px}
+.item.done{opacity:.65}
+.item .top{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-bottom:6px}
+.badge{background:var(--panel);color:var(--ink);padding:1px 8px}.badge.q{background:var(--red);color:#fff}
+.msg{white-space:pre-wrap;margin:6px 0}
+.qref{background:var(--panel);padding:10px;font-size:14px;margin:8px 0}
+.item textarea{width:100%;font:14px/1.4 var(--sans);padding:6px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);box-sizing:border-box}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.acts .btn{min-height:36px;padding:6px 12px;font-size:14px}
+#login{max-width:360px;margin:12vh auto;display:grid;gap:12px}
+#login input{font:16px var(--sans);padding:10px;border:1px solid var(--rule);background:var(--bg);color:var(--ink)}
+table.pages{border-collapse:collapse;font-size:14px}table.pages td{padding:4px 16px 4px 0}
+</style>
+</head>
+<body>
+<div class="ad">
+  <form id="login" hidden>
+    <h1 style="font:600 24px var(--serif);margin:0">CSLB 备考 · 后台</h1>
+    <input type="password" id="pw" placeholder="密码" autocomplete="current-password" required>
+    <button class="btn pri">登录</button>
+    <p class="small" id="lmsg" role="status"></p>
+  </form>
+  <main id="app" hidden>
+    <header><h1>CSLB 备考 · 后台</h1><a class="btn" href="../">回到网站</a><button class="btn" id="reload">刷新</button><button class="btn" id="logout">退出</button></header>
+    <h2>浏览量</h2>
+    <div class="cards" id="cards"></div>
+    <p class="small">最近 30 天每日浏览量（美国中部时间），只统计次数，不记录访客信息。</p>
+    <div class="chart" id="chart"></div>
+    <table class="pages" id="pages"></table>
+    <h2>意见</h2>
+    <div class="filters" id="filters"></div>
+    <div id="list"></div>
+  </main>
+</div>
+<script src="../content/questions.js"></script>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const Q=Object.fromEntries((window.QUESTIONS||[]).map(q=>[q.id,q]));
+const KIND={question:'题目有误',site:'网站问题',idea:'建议'},ST={new:'待处理',done:'已处理',ignored:'忽略'},LANG={zh:'中文',en:'英文',es:'西语'};
+const PG={index:'首页',practice:'章节练习',exam:'模拟考试',notes:'知识点讲义',guide:'申请指南'};
+let pw=sessionStorage.getItem('cslb-admin')||'',data=null,filter='new';
+async function api(method,body){
+  const r=await fetch('/api/admin',{method,headers:{'x-admin-password':pw,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  if(r.status===401){sessionStorage.removeItem('cslb-admin');showLogin('密码不对');throw 0}
+  if(!r.ok)throw new Error('server');return r.json();
+}
+function showLogin(m){$('#app').hidden=true;$('#login').hidden=false;$('#lmsg').textContent=m||'';$('#pw').focus()}
+async function load(){
+  try{data=await api('GET')}catch(e){if(e)alert('加载失败，请稍后再试');return}
+  sessionStorage.setItem('cslb-admin',pw);$('#login').hidden=true;$('#app').hidden=false;render();
+}
+function render(){
+  const pending=data.feedback.filter(f=>f.status==='new').length;
+  $('#cards').innerHTML=[['今天',data.today],['最近 7 天',data.week],['累计',data.total],['待处理意见',pending]].map(([k,v])=>`<div class="card"><b>${v}</b><span>${k}</span></div>`).join('');
+  const max=Math.max(1,...data.days.map(d=>d.n));
+  $('#chart').innerHTML=data.days.map(d=>`<i style="height:${d.n/max*100}%" data-t="${d.day.slice(5)}：${d.n}"></i>`).join('')||'<span class="small">还没有数据</span>';
+  $('#pages').innerHTML=data.pages.map(p=>`<tr><td>${PG[p.page]||esc(p.page)}</td><td>${p.n}</td></tr>`).join('');
+  const cnt=s=>data.feedback.filter(f=>s==='all'||f.status===s).length;
+  $('#filters').innerHTML=[['new','待处理'],['done','已处理'],['ignored','忽略'],['all','全部']].map(([k,n])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${n} <small>${cnt(k)}</small></button>`).join('');
+  document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;render()});
+  const list=data.feedback.filter(f=>filter==='all'||f.status===filter);
+  $('#list').innerHTML=list.length?list.map(f=>{const q=f.qid&&Q[f.qid];
+    return `<div class="item ${f.status!=='new'?'done':''}" data-id="${f.id}">
+      <div class="top"><span class="badge ${f.kind==='question'?'q':''}">${KIND[f.kind]||f.kind}</span><span>${new Date(f.created_at).toLocaleString('zh-CN',{timeZone:'America/Chicago'})}</span><span>${LANG[f.lang]||''}</span><span>${esc(f.page||'')}</span><span>${ST[f.status]}</span></div>
+      ${f.qid?`<div class="qref"><b>${esc(f.qid)}</b> ${q?`${esc(q.q)}<br>正确答案：${esc(q.o[q.a][0])}（${esc(q.o[q.a][1])}）<br>出处：<a href="${esc(q.s[1])}" target="_blank" rel="noopener">${esc(q.s[0])}</a>`:'（题号不存在）'}</div>`:''}
+      <p class="msg">${esc(f.message)}</p>
+      ${f.contact?`<p class="small">联系方式：${esc(f.contact)}</p>`:''}
+      <textarea rows="2" placeholder="处理备注（只有后台能看到）">${esc(f.note||'')}</textarea>
+      <div class="acts">${f.status!=='done'?'<button class="btn pri" data-s="done">标记已处理</button>':''}${f.status!=='ignored'?'<button class="btn" data-s="ignored">忽略</button>':''}${f.status!=='new'?'<button class="btn" data-s="new">恢复待处理</button>':''}<button class="btn" data-s="save">保存备注</button><button class="btn" data-s="delete">删除</button></div></div>`}).join(''):'<p class="small">没有意见。</p>';
+  document.querySelectorAll('.item [data-s]').forEach(b=>b.onclick=async()=>{
+    const it=b.closest('.item'),id=+it.dataset.id,f=data.feedback.find(x=>x.id===id),note=it.querySelector('textarea').value,s=b.dataset.s;
+    if(s==='delete'){if(!confirm('删除这条意见？删除后无法恢复。'))return;await api('POST',{action:'delete',id});data.feedback=data.feedback.filter(x=>x.id!==id)}
+    else{const status=s==='save'?f.status:s;await api('POST',{action:'status',id,status,note});f.status=status;f.note=note}
+    render();
+  });
+}
+$('#login').onsubmit=e=>{e.preventDefault();pw=$('#pw').value;load()};
+$('#logout').onclick=()=>{sessionStorage.removeItem('cslb-admin');pw='';showLogin()};
+$('#reload').onclick=load;
+pw?load():showLogin();
+</script>
+</body>
+</html>
