@@ -1,8 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://cslb.vercel.app/</loc><lastmod>2026-11-23</lastmod><priority>1.0</priority></url>
-  <url><loc>https://cslb.vercel.app/practice.html</loc><lastmod>2026-11-23</lastmod><priority>0.9</priority></url>
-  <url><loc>https://cslb.vercel.app/exam.html</loc><lastmod>2026-11-23</lastmod><priority>0.9</priority></url>
-  <url><loc>https://cslb.vercel.app/notes.html</loc><lastmod>2026-11-23</lastmod><priority>0.8</priority></url>
-  <url><loc>https://cslb.vercel.app/guide.html</loc><lastmod>2026-11-23</lastmod><priority>0.8</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://cslbexam.org/</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/"/>
+  </url>
+  <url><loc>https://cslbexam.org/practice.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/practice.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/practice.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/practice.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/practice.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/practice.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/exam.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/exam.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/exam.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/exam.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/exam.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/exam.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/exam.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/guide.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/guide.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/guide.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/guide.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/guide.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/guide.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-org.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-org.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-org.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-org.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-org.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-org.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-org.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-fin.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-fin.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-fin.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-fin.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-fin.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-fin.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-fin.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-emp.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-emp.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-emp.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-emp.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-emp.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-emp.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-emp.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-lien.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-lien.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-lien.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-lien.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-lien.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-lien.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-lien.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-con.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-con.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-con.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-con.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-con.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-con.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-con.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-pub.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-pub.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-pub.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-pub.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-pub.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-pub.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-pub.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-safe.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-safe.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-safe.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-safe.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-safe.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-safe.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-safe.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/notes-b.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-b.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/zh/notes-b.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-b.html"/>
+  </url>
+  <url><loc>https://cslbexam.org/es/notes-b.html</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cslbexam.org/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://cslbexam.org/zh/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cslbexam.org/es/notes-b.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cslbexam.org/notes-b.html"/>
+  </url>
 </urlset>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Source page with all three languages. Titles, descriptions and SEO tags are set in scripts/build.py. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>try{var l=JSON.parse(localStorage.getItem('cslb-lang'));if(l==='zh')document.documentElement.lang='zh-CN';else if(l==='es')document.documentElement.lang='es'}catch(e){}</script>
+<title>Study notes · CSLB Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header id="top" class="top"></header>
+<main class="wrap narrow band">
+<div class="l-zh">
+  <h1>知识点讲义</h1>
+  <p class="lead">考试最爱考的是数字：天数、金额、尺寸。下面按 CSLB 考试大纲把这些数字和规定整理成表，英文术语保留原文，方便对照题干。</p>
+  <nav class="toc scroll" aria-label="目录">
+    <a href="#org">执照与公司</a><a href="#fin">企业财务</a><a href="#emp">用工</a><a href="#lien">保险与留置权</a><a href="#con">合同</a><a href="#pub">公共工程</a><a href="#safe">安全</a><a href="#b">B 类专业</a><a href="#terms">术语对照</a>
+  </nav>
+
+  <h2 id="org">法律与商务 · 执照与公司组织</h2>
+  <table class="stack"><thead><tr><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>需要执照的金额</td><td>工料合计 $1,000 及以上（2025 年起，原为 $500）</td></tr>
+    <tr><td>承包商保证金 Contractor bond</td><td>$25,000；用 RME 担保另加 $25,000 qualifier 保证金</td></tr>
+    <tr><td>LLC 额外要求</td><td>$100,000 员工/工人保证金 + 一般责任险（5 名及以下登记人员至少 $1M）</td></tr>
+    <tr><td>RMO / RME</td><td>RMO 是公司负责人（officer、manager、member）；RME 是全职 W-2 员工，每周 ≥ 32 小时或营业时间 80%</td></tr>
+    <tr><td>qualifier 离开</td><td>90 天内通知并更换，否则执照暂停</td></tr>
+    <tr><td>续期</td><td>有效执照每 2 年；非活跃执照每 4 年</td></tr>
+    <tr><td>信息变更</td><td>名称、地址、人员变更 90 天内报 CSLB</td></tr>
+    <tr><td>广告</td><td>名片、车身、网站等都要标执照号</td></tr>
+    <tr><td>无照施工</td><td>不能起诉追讨工程款（B&amp;P §7031），也不能申请留置权</td></tr>
+    <tr><td>追诉期</td><td>一般 4 年；结构缺陷 10 年</td></tr>
+  </tbody></table>
+
+  <h2 id="fin">企业财务</h2>
+  <table class="stack"><thead><tr><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>Markup 与 Margin</td><td>加价率按成本算，毛利率按售价算：成本加价 25% = 毛利率 20%</td></tr>
+    <tr><td>流动比率 Current ratio</td><td>流动资产 ÷ 流动负债，一般希望 &gt; 1</td></tr>
+    <tr><td>权责发生制 Accrual</td><td>赚取时记收入、发生时记费用；收付实现制 Cash basis 按收付款记</td></tr>
+    <tr><td>工资税</td><td>FUTA 和加州 UI 由雇主缴；SDI 从员工工资扣；社保和医保雇主、员工各一半</td></tr>
+  </tbody></table>
+
+  <h2 id="emp">用工</h2>
+  <table class="stack"><thead><tr><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>I-9</td><td>员工第一天填第一部分；雇主 3 个工作日内完成第二部分</td></tr>
+    <tr><td>加班</td><td>每天超 8 小时或每周超 40 小时付 1.5 倍；每天超 12 小时付 2 倍</td></tr>
+    <tr><td>最后工资</td><td>解雇：当场付清；未通知辞职：72 小时内</td></tr>
+    <tr><td>用餐与休息</td><td>超过 5 小时给 30 分钟用餐；每 4 小时 10 分钟带薪休息</td></tr>
+    <tr><td>带薪病假</td><td>每年至少 40 小时或 5 天</td></tr>
+    <tr><td>新员工报告</td><td>20 天内报 EDD（DE 34）；I-9 第二部分 3 个工作日内</td></tr>
+    <tr><td>工资记录</td><td>至少保存 3 年</td></tr>
+    <tr><td>员工 vs 独立承包商</td><td>加州按 ABC 测试判断，大多数施工工人应为员工</td></tr>
+  </tbody></table>
+
+  <h2 id="lien">保险与留置权</h2>
+  <table class="stack"><thead><tr><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>初步通知 Preliminary notice</td><td>首次供料或开工后 20 天内发出</td></tr>
+    <tr><td>留置权登记（已登记完工通知）</td><td>总包 60 天；分包和供应商 30 天</td></tr>
+    <tr><td>留置权登记（未登记完工通知）</td><td>完工后 90 天内</td></tr>
+    <tr><td>劳工赔偿险 Workers' comp</td><td>有员工必须投保；C-8、C-20、C-22、C-39、D-49 无员工也必须投保；2028 年起所有承包商都必须投保。EMR 1.0 为平均，越低越好</td></tr>
+  </tbody></table>
+
+  <h2 id="con">合同</h2>
+  <table class="stack"><thead><tr><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>家装首付</td><td>不超过 $1,000 或合同价 10%，取较少者</td></tr>
+    <tr><td>家装取消权</td><td>3 个工作日；业主 65 岁以上为 5 个工作日</td></tr>
+    <tr><td>维修服务合同</td><td>$750 及以下可用简化规定</td></tr>
+    <tr><td>变更单 Change order</td><td>书面、写明价格影响、双方签字</td></tr>
+    <tr><td>付分包进度款</td><td>收到后 7 天内（B&amp;P §7108.5）</td></tr>
+    <tr><td>保留金 Retention（私人工程）</td><td>2026 年起签的合同上限 5%（Civil Code §8811）；业主完工后 45 天内付总包；总包收到后 10 天内付分包</td></tr>
+    <tr><td>进度款（私人工程）</td><td>业主收到请款后 30 天内付总包</td></tr>
+    <tr><td>留置权执行</td><td>完工通知须完工后 15 天内登记；登记留置权后 90 天内起诉</td></tr>
+  </tbody></table>
+
+  <h2 id="pub">公共工程</h2>
+  <table class="stack"><thead><tr><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>DIR 登记</td><td>投标公共工程前须在劳资关系部登记，每年续</td></tr>
+    <tr><td>现行工资 Prevailing wage</td><td>超过 $1,000 的公共工程适用；提交认证工资单 Certified payroll</td></tr>
+    <tr><td>付款保证金 Payment bond</td><td>合同超过 $25,000 须提供</td></tr>
+    <tr><td>学徒</td><td>合同 $30,000 及以上须雇用学徒</td></tr>
+    <tr><td>保留金与付款</td><td>保留金上限 5%；完工后 60 天内付总包，总包 7 天内付分包</td></tr>
+    <tr><td>分包名单</td><td>超过总标价 0.5% 的分包须在投标时列出</td></tr>
+  </tbody></table>
+
+  <h2 id="safe">安全</h2>
+  <table class="stack"><thead><tr><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>严重事故报告</td><td>8 小时内报 Cal/OSHA</td></tr>
+    <tr><td>IIPP</td><td>每个雇主都要有书面工伤与疾病预防计划</td></tr>
+    <tr><td>班前安全会 Tailgate meeting</td><td>至少每 10 个工作日一次</td></tr>
+    <tr><td>石棉</td><td>扰动 100 平方英尺及以上须在 Cal/OSHA 登记</td></tr>
+    <tr><td>沟槽 Trench</td><td>5 英尺及以上要支护、放坡或防护箱；合格人员每天检查</td></tr>
+    <tr><td>开挖前 811</td><td>至少提前 2 个工作日、最多 14 个日历日通知</td></tr>
+    <tr><td>防暑</td><td>超过 80°F 设遮荫；每人每小时 1 夸脱水</td></tr>
+    <tr><td>防坠</td><td>加州施工一般 7.5 英尺触发（联邦 6 英尺）</td></tr>
+  </tbody></table>
+
+  <h2 id="b">B 类专业</h2>
+  <p>B 类偏住宅和木结构：框架、抗震五金、灰泥、装修加起来占四成多。平时做厂房和钢结构的人，这几块要重点补。</p>
+  <table class="stack"><thead><tr><th>部分</th><th>考点</th><th>要点</th></tr></thead><tbody>
+    <tr><td>规划与预算</td><td>混凝土方量</td><td>长 × 宽 × 厚（英尺）÷ 27 = 立方码，订货加 5–10% 损耗</td></tr>
+    <tr><td>规划与预算</td><td>屋面 square</td><td>1 square = 100 平方英尺</td></tr>
+    <tr><td>规划与预算</td><td>钢筋号数</td><td>#n = n/8 英寸，#4 = ½ 英寸</td></tr>
+    <tr><td>核心工种</td><td>混凝土</td><td>28 天强度为设计强度；坍落度测和易性；接触土保护层 3 英寸</td></tr>
+    <tr><td>核心工种</td><td>电气</td><td>15A 用 14 AWG、20A 用 12 AWG；浴室、厨房台面、车库、室外需 GFCI</td></tr>
+    <tr><td>核心工种</td><td>水暖</td><td>≤ 3 英寸排水管坡度 ¼ 英寸/英尺；通气管保护水封；热水器上下三分之一处两道抗震带</td></tr>
+    <tr><td>框架与结构</td><td>锚栓</td><td>½ 英寸，间距 ≤ 6 英尺，距端头 12 英寸内；接触混凝土的地梁板要防腐处理</td></tr>
+    <tr><td>框架与结构</td><td>顶梁板</td><td>双层，上下接头错开 ≥ 24 英寸</td></tr>
+    <tr><td>框架与结构</td><td>楼梯与护栏</td><td>踏步高 ≤ 7¾ 英寸、踏面 ≥ 10 英寸；住宅护栏 36 英寸，商业 42 英寸</td></tr>
+    <tr><td>框架与结构</td><td>灰泥</td><td>scratch → brown → finish 三道</td></tr>
+    <tr><td>装修工种</td><td>石膏板</td><td>Type X 防火，MR 防潮</td></tr>
+    <tr><td>装修工种</td><td>逃生窗</td><td>净开口 5.7 平方英尺（首层 5.0），窗台 ≤ 44 英寸</td></tr>
+    <tr><td>装修工种</td><td>层高与报警器</td><td>可居住房间 ≥ 7 英尺；烟雾报警器每间卧室、卧室区外、每层都装</td></tr>
+    <tr><td>安全</td><td>梯子与交通</td><td>伸缩梯高出平台 3 英尺；旗手用 STOP/SLOW 牌</td></tr>
+  </tbody></table>
+
+  <h2 id="terms">常用术语对照</h2>
+  <table class="stack"><thead><tr><th>English</th><th>中文</th></tr></thead><tbody>
+    <tr><td>Qualifying individual / RMO / RME</td><td>执照担保人 / 负责人担保 / 员工担保</td></tr>
+    <tr><td>Mechanics lien</td><td>施工留置权</td></tr>
+    <tr><td>Preliminary notice</td><td>初步通知（20 天通知）</td></tr>
+    <tr><td>Notice of completion</td><td>完工通知</td></tr>
+    <tr><td>Stop payment notice</td><td>止付通知</td></tr>
+    <tr><td>Retention</td><td>保留金</td></tr>
+    <tr><td>Change order</td><td>变更单</td></tr>
+    <tr><td>Prevailing wage</td><td>现行工资</td></tr>
+    <tr><td>Workers' compensation</td><td>劳工赔偿险</td></tr>
+    <tr><td>Sill plate / Top plate / Header</td><td>地梁板 / 顶梁板 / 过梁</td></tr>
+    <tr><td>Shoring / Sloping / Shielding</td><td>支护 / 放坡 / 防护箱</td></tr>
+    <tr><td>Competent person</td><td>合格人员</td></tr>
+  </tbody></table>
+  <p class="small">参考：<a href="https://cslb.ca.gov/Resources/StudyGuides/LawStudyGuide.pdf">CSLB 法律与商务学习指南</a> · <a href="https://cslb.ca.gov/Resources/StudyGuides/BStudyGuide.pdf">CSLB B 类学习指南</a> · CSLB《California Contractors License Law &amp; Reference Book》。</p>
+</div>
+<div class="l-en">
+  <h1>Study notes</h1>
+  <p class="lead">The exams love numbers: days, dollar amounts and dimensions. These tables collect them by section of the CSLB outline.</p>
+  <nav class="toc scroll" aria-label="Contents">
+    <a href="#org-en">Licensing</a><a href="#fin-en">Finances</a><a href="#emp-en">Employment</a><a href="#lien-en">Insurance &amp; liens</a><a href="#con-en">Contracts</a><a href="#pub-en">Public works</a><a href="#safe-en">Safety</a><a href="#b-en">General Building</a>
+  </nav>
+
+  <h2 id="org-en">Law &amp; Business · Licensing and business organization</h2>
+  <table class="stack"><thead><tr><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>When a license is required</td><td>Labor and materials of $1,000 or more (since 2025; previously $500)</td></tr>
+    <tr><td>Contractor bond</td><td>$25,000; plus a $25,000 bond of qualifying individual when qualified by an RME</td></tr>
+    <tr><td>LLC requirements</td><td>$100,000 employee/worker bond plus liability insurance (at least $1M for 5 or fewer personnel of record)</td></tr>
+    <tr><td>RMO / RME</td><td>RMO is an officer, manager or member; RME is a W-2 employee working ≥ 32 hours a week or 80% of business hours</td></tr>
+    <tr><td>Qualifier leaves</td><td>Notify and replace within 90 days or the license is suspended</td></tr>
+    <tr><td>Renewal</td><td>Active license every 2 years; inactive every 4 years</td></tr>
+    <tr><td>Changes on record</td><td>Report name, address or personnel changes within 90 days</td></tr>
+    <tr><td>Advertising</td><td>License number on business cards, vehicles, websites and all ads</td></tr>
+    <tr><td>Unlicensed work</td><td>No lawsuit to collect payment (B&amp;P §7031) and no mechanics lien</td></tr>
+    <tr><td>Time to discipline</td><td>Generally 4 years; 10 years for structural defects</td></tr>
+  </tbody></table>
+
+  <h2 id="fin-en">Business finances</h2>
+  <table class="stack"><thead><tr><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>Markup vs. margin</td><td>Markup is on cost, margin is on price: a 25% markup equals a 20% margin</td></tr>
+    <tr><td>Current ratio</td><td>Current assets ÷ current liabilities; above 1 is generally wanted</td></tr>
+    <tr><td>Accrual vs. cash</td><td>Accrual records revenue when earned; cash basis when money changes hands</td></tr>
+    <tr><td>Payroll taxes</td><td>FUTA and California UI paid by employer; SDI withheld from employees; Social Security and Medicare split</td></tr>
+  </tbody></table>
+
+  <h2 id="emp-en">Employment</h2>
+  <table class="stack"><thead><tr><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>Form I-9</td><td>Section 1 on day one; employer completes Section 2 within 3 business days</td></tr>
+    <tr><td>Overtime</td><td>1.5× over 8 hours a day or 40 a week; 2× over 12 hours a day</td></tr>
+    <tr><td>Final pay</td><td>Fired: immediately; quit without notice: within 72 hours</td></tr>
+    <tr><td>Meals and rest</td><td>30-minute meal after 5 hours; 10-minute paid rest per 4 hours</td></tr>
+    <tr><td>Paid sick leave</td><td>At least 40 hours or 5 days a year</td></tr>
+    <tr><td>New-hire report</td><td>To EDD within 20 days (DE 34); I-9 Section 2 within 3 business days</td></tr>
+    <tr><td>Payroll records</td><td>Keep at least 3 years</td></tr>
+    <tr><td>Employee vs. contractor</td><td>California uses the ABC test; most construction workers are employees</td></tr>
+  </tbody></table>
+
+  <h2 id="lien-en">Insurance and liens</h2>
+  <table class="stack"><thead><tr><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>Preliminary notice</td><td>Within 20 days of first furnishing labor or materials</td></tr>
+    <tr><td>Lien deadline (notice of completion recorded)</td><td>Direct contractor 60 days; subcontractors and suppliers 30 days</td></tr>
+    <tr><td>Lien deadline (no notice of completion)</td><td>90 days after completion</td></tr>
+    <tr><td>Workers' compensation</td><td>Required with employees; C-8, C-20, C-22, C-39 and D-49 need it even without employees; all contractors from 2028. EMR 1.0 is average, lower is better</td></tr>
+  </tbody></table>
+
+  <h2 id="con-en">Contracts</h2>
+  <table class="stack"><thead><tr><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>Home improvement down payment</td><td>$1,000 or 10% of the price, whichever is less</td></tr>
+    <tr><td>Right to cancel</td><td>3 business days; 5 for owners 65 or older</td></tr>
+    <tr><td>Service and repair contracts</td><td>Simplified rules at $750 or less</td></tr>
+    <tr><td>Change orders</td><td>In writing, with the price effect, signed by both parties</td></tr>
+    <tr><td>Paying subcontractors</td><td>Within 7 days of receiving a progress payment (B&amp;P §7108.5)</td></tr>
+    <tr><td>Retention (private works)</td><td>Capped at 5% for contracts from 2026 (Civil Code §8811); owner pays within 45 days of completion; prime pays subs within 10 days of receipt</td></tr>
+    <tr><td>Progress payments (private)</td><td>Owner pays within 30 days of a written demand</td></tr>
+    <tr><td>Enforcing a lien</td><td>Notice of completion recorded within 15 days of completion; sue within 90 days of recording the lien</td></tr>
+  </tbody></table>
+
+  <h2 id="pub-en">Public works</h2>
+  <table class="stack"><thead><tr><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>DIR registration</td><td>Required before bidding, renewed yearly</td></tr>
+    <tr><td>Prevailing wage</td><td>Applies over $1,000; submit certified payroll</td></tr>
+    <tr><td>Payment bond</td><td>Required on contracts over $25,000</td></tr>
+    <tr><td>Apprentices</td><td>Required on contracts of $30,000 or more</td></tr>
+    <tr><td>Retention and payment</td><td>5% cap; released within 60 days of completion, then to subs within 7 days</td></tr>
+    <tr><td>Subcontractor listing</td><td>List subs over one-half of 1% of the prime bid</td></tr>
+  </tbody></table>
+
+  <h2 id="safe-en">Safety</h2>
+  <table class="stack"><thead><tr><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>Serious injury report</td><td>To Cal/OSHA within 8 hours</td></tr>
+    <tr><td>IIPP</td><td>Every employer needs a written Injury and Illness Prevention Program</td></tr>
+    <tr><td>Tailgate meetings</td><td>At least every 10 working days</td></tr>
+    <tr><td>Asbestos</td><td>Cal/OSHA registration for 100 sq ft or more</td></tr>
+    <tr><td>Trenches</td><td>Protective system at 5 ft or deeper; daily inspection by a competent person</td></tr>
+    <tr><td>Call 811</td><td>At least 2 working days and no more than 14 calendar days before digging</td></tr>
+    <tr><td>Heat</td><td>Shade above 80°F; 1 quart of water per worker per hour</td></tr>
+    <tr><td>Fall protection</td><td>Generally 7.5 ft in California construction (6 ft federal)</td></tr>
+  </tbody></table>
+
+  <h2 id="b-en">General Building (B)</h2>
+  <p>The B exam leans residential and wood-frame: framing, seismic hardware, stucco and finishes are over 40% together. Contractors who mostly build steel and industrial work should study these closely.</p>
+  <table class="stack"><thead><tr><th>Section</th><th>Topic</th><th>Key point</th></tr></thead><tbody>
+    <tr><td>Planning</td><td>Concrete volume</td><td>L × W × T (ft) ÷ 27 = cubic yards; order 5–10% extra</td></tr>
+    <tr><td>Planning</td><td>Roofing square</td><td>1 square = 100 sq ft</td></tr>
+    <tr><td>Planning</td><td>Rebar size</td><td>#n = n/8 inch; #4 = ½ inch</td></tr>
+    <tr><td>Core trades</td><td>Concrete</td><td>Design strength at 28 days; slump measures workability; 3 in cover against earth</td></tr>
+    <tr><td>Core trades</td><td>Electrical</td><td>14 AWG for 15 A, 12 AWG for 20 A; GFCI in baths, kitchen counters, garages, outdoors</td></tr>
+    <tr><td>Core trades</td><td>Plumbing</td><td>¼ in per ft slope for drains 3 in and smaller; vents protect trap seals; two seismic straps on water heaters</td></tr>
+    <tr><td>Framing</td><td>Anchor bolts</td><td>½ in, ≤ 6 ft apart, within 12 in of plate ends; treated sill plates on concrete</td></tr>
+    <tr><td>Framing</td><td>Top plates</td><td>Doubled, joints offset ≥ 24 in</td></tr>
+    <tr><td>Framing</td><td>Stairs and guards</td><td>Riser ≤ 7¾ in, tread ≥ 10 in; guards 36 in residential, 42 in commercial</td></tr>
+    <tr><td>Framing</td><td>Stucco</td><td>Scratch → brown → finish</td></tr>
+    <tr><td>Finish trades</td><td>Gypsum board</td><td>Type X fire-rated; MR moisture-resistant</td></tr>
+    <tr><td>Finish trades</td><td>Egress windows</td><td>5.7 sq ft net (5.0 at grade floor); sill ≤ 44 in</td></tr>
+    <tr><td>Finish trades</td><td>Ceilings and alarms</td><td>Habitable rooms ≥ 7 ft; smoke alarms in bedrooms, outside sleeping areas, every story</td></tr>
+    <tr><td>Safety</td><td>Ladders and traffic</td><td>Extension ladders 3 ft above landing; flaggers use STOP/SLOW paddles</td></tr>
+  </tbody></table>
+  <p class="small">References: <a href="https://cslb.ca.gov/Resources/StudyGuides/LawStudyGuide.pdf">CSLB Law &amp; Business study guide</a> · <a href="https://cslb.ca.gov/Resources/StudyGuides/BStudyGuide.pdf">CSLB General Building study guide</a> · CSLB <i>California Contractors License Law &amp; Reference Book</i>.</p>
+</div>
+<div class="l-es">
+  <h1>Apuntes</h1>
+  <p class="lead">Al examen le encantan los números: días, cantidades de dinero y medidas. Estas tablas los reúnen por sección del temario de CSLB.</p>
+  <nav class="toc scroll" aria-label="Contenido">
+    <a href="#org-es">Licencias</a><a href="#fin-es">Finanzas</a><a href="#emp-es">Empleo</a><a href="#lien-es">Seguros y gravámenes</a><a href="#con-es">Contratos</a><a href="#pub-es">Obras públicas</a><a href="#safe-es">Seguridad</a><a href="#b-es">Construcción General</a>
+  </nav>
+
+  <h2 id="org-es">Leyes y Negocios · Licencias y organización</h2>
+  <table class="stack"><thead><tr><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Cuándo se requiere licencia</td><td>Mano de obra y materiales de $1,000 o más (desde 2025; antes $500)</td></tr>
+    <tr><td>Fianza del contratista</td><td>$25,000; más una fianza de $25,000 del calificador si lo califica un RME</td></tr>
+    <tr><td>Requisitos de LLC</td><td>Fianza de $100,000 para empleados/trabajadores y seguro de responsabilidad (al menos $1M con 5 o menos personas registradas)</td></tr>
+    <tr><td>RMO / RME</td><td>El RMO es directivo, gerente o miembro; el RME es empleado W-2 que trabaja ≥ 32 horas a la semana u 80% del horario</td></tr>
+    <tr><td>Si se va el calificador</td><td>Avisar y reemplazar en 90 días o la licencia se suspende</td></tr>
+    <tr><td>Renovación</td><td>Licencia activa cada 2 años; inactiva cada 4 años</td></tr>
+    <tr><td>Cambios en el registro</td><td>Reportar cambios de nombre, dirección o personal en 90 días</td></tr>
+    <tr><td>Publicidad</td><td>Número de licencia en tarjetas, vehículos, sitios web y todo anuncio</td></tr>
+    <tr><td>Trabajo sin licencia</td><td>No se puede demandar para cobrar (B&amp;P §7031) ni registrar gravamen</td></tr>
+    <tr><td>Plazo para disciplina</td><td>Generalmente 4 años; 10 años por defectos estructurales</td></tr>
+  </tbody></table>
+
+  <h2 id="fin-es">Finanzas del negocio</h2>
+  <table class="stack"><thead><tr><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Recargo vs. margen</td><td>El recargo es sobre el costo y el margen sobre el precio: 25% de recargo = 20% de margen</td></tr>
+    <tr><td>Razón corriente</td><td>Activo corriente ÷ pasivo corriente; normalmente mayor que 1</td></tr>
+    <tr><td>Devengo vs. caja</td><td>Devengo registra ingresos al ganarse; caja, cuando entra el dinero</td></tr>
+    <tr><td>Impuestos de nómina</td><td>FUTA y UI de California los paga el empleador; el SDI se retiene al empleado; Seguro Social y Medicare se dividen</td></tr>
+  </tbody></table>
+
+  <h2 id="emp-es">Empleo</h2>
+  <table class="stack"><thead><tr><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Formulario I-9</td><td>Sección 1 el primer día; el empleador completa la Sección 2 en 3 días hábiles</td></tr>
+    <tr><td>Tiempo extra</td><td>1.5× después de 8 horas al día o 40 a la semana; 2× después de 12 horas al día</td></tr>
+    <tr><td>Último pago</td><td>Despido: de inmediato; renuncia sin aviso: en 72 horas</td></tr>
+    <tr><td>Comida y descanso</td><td>30 minutos para comer después de 5 horas; 10 minutos de descanso pagado por cada 4 horas</td></tr>
+    <tr><td>Licencia por enfermedad</td><td>Al menos 40 horas o 5 días al año</td></tr>
+    <tr><td>Reporte de nuevo empleado</td><td>Al EDD en 20 días (DE 34); Sección 2 del I-9 en 3 días hábiles</td></tr>
+    <tr><td>Registros de nómina</td><td>Guardarlos al menos 3 años</td></tr>
+    <tr><td>Empleado vs. contratista</td><td>California usa la prueba ABC; la mayoría de los trabajadores de construcción son empleados</td></tr>
+  </tbody></table>
+
+  <h2 id="lien-es">Seguros y gravámenes</h2>
+  <table class="stack"><thead><tr><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Aviso preliminar</td><td>Dentro de 20 días de empezar a suministrar mano de obra o materiales</td></tr>
+    <tr><td>Plazo del gravamen (con aviso de terminación)</td><td>Contratista directo 60 días; subcontratistas y proveedores 30 días</td></tr>
+    <tr><td>Plazo del gravamen (sin aviso de terminación)</td><td>90 días después de terminar</td></tr>
+    <tr><td>Compensación laboral</td><td>Obligatoria con empleados; C-8, C-20, C-22, C-39 y D-49 la necesitan aunque no tengan empleados; todos los contratistas desde 2028. EMR 1.0 es el promedio, más bajo es mejor</td></tr>
+  </tbody></table>
+
+  <h2 id="con-es">Contratos</h2>
+  <table class="stack"><thead><tr><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Anticipo en mejoras al hogar</td><td>$1,000 o el 10% del precio, lo que sea menor</td></tr>
+    <tr><td>Derecho a cancelar</td><td>3 días hábiles; 5 si el dueño tiene 65 años o más</td></tr>
+    <tr><td>Contratos de servicio y reparación</td><td>Reglas simplificadas en $750 o menos</td></tr>
+    <tr><td>Órdenes de cambio</td><td>Por escrito, con el efecto en el precio, firmadas por ambas partes</td></tr>
+    <tr><td>Pago a subcontratistas</td><td>Dentro de 7 días de recibir el pago parcial (B&amp;P §7108.5)</td></tr>
+    <tr><td>Retención (obra privada)</td><td>Tope de 5% en contratos desde 2026 (Civil Code §8811); el dueño paga en 45 días después de terminar; el contratista paga a los subcontratistas en 10 días</td></tr>
+    <tr><td>Pagos parciales (obra privada)</td><td>El dueño paga en 30 días de la solicitud por escrito</td></tr>
+    <tr><td>Ejecutar un gravamen</td><td>Aviso de terminación registrado en 15 días; demandar dentro de 90 días de registrar el gravamen</td></tr>
+  </tbody></table>
+
+  <h2 id="pub-es">Obras públicas</h2>
+  <table class="stack"><thead><tr><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Registro en el DIR</td><td>Obligatorio antes de licitar; se renueva cada año</td></tr>
+    <tr><td>Salario prevaleciente</td><td>Aplica a más de $1,000; presentar nómina certificada</td></tr>
+    <tr><td>Fianza de pago</td><td>Obligatoria en contratos de más de $25,000</td></tr>
+    <tr><td>Aprendices</td><td>Obligatorios en contratos de $30,000 o más</td></tr>
+    <tr><td>Retención y pago</td><td>Tope de 5%; se libera en 60 días después de terminar y a los subcontratistas en 7 días</td></tr>
+    <tr><td>Lista de subcontratistas</td><td>Nombrar a los de más del 0.5% de la oferta principal</td></tr>
+  </tbody></table>
+
+  <h2 id="safe-es">Seguridad</h2>
+  <table class="stack"><thead><tr><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Reporte de lesión grave</td><td>A Cal/OSHA en 8 horas</td></tr>
+    <tr><td>IIPP</td><td>Todo empleador necesita un Programa de Prevención de Lesiones y Enfermedades por escrito</td></tr>
+    <tr><td>Reuniones "tailgate"</td><td>Al menos cada 10 días hábiles</td></tr>
+    <tr><td>Asbesto</td><td>Registro en Cal/OSHA para 100 pies cuadrados o más</td></tr>
+    <tr><td>Zanjas</td><td>Sistema de protección desde 5 pies; inspección diaria de una persona competente</td></tr>
+    <tr><td>Llamar al 811</td><td>Al menos 2 días hábiles y no más de 14 días naturales antes de excavar</td></tr>
+    <tr><td>Calor</td><td>Sombra arriba de 80°F; 1 cuarto de galón de agua por trabajador por hora</td></tr>
+    <tr><td>Protección contra caídas</td><td>Generalmente 7.5 pies en la construcción en California (6 pies federal)</td></tr>
+  </tbody></table>
+
+  <h2 id="b-es">Construcción General (B)</h2>
+  <p>El examen B se inclina a vivienda y estructura de madera: estructura, herrajes sísmicos, estuco y acabados suman más del 40%. Quien trabaja sobre todo en acero e industrial debe estudiar bien estos temas.</p>
+  <table class="stack"><thead><tr><th>Sección</th><th>Tema</th><th>Punto clave</th></tr></thead><tbody>
+    <tr><td>Planificación</td><td>Volumen de concreto</td><td>Largo × ancho × espesor (pies) ÷ 27 = yardas cúbicas; pedir 5–10% extra</td></tr>
+    <tr><td>Planificación</td><td>"Square" de techo</td><td>1 square = 100 pies cuadrados</td></tr>
+    <tr><td>Planificación</td><td>Número de varilla</td><td>#n = n/8 de pulgada; #4 = ½ pulgada</td></tr>
+    <tr><td>Oficios principales</td><td>Concreto</td><td>Resistencia de diseño a 28 días; el revenimiento mide trabajabilidad; 3 pulgadas de recubrimiento contra la tierra</td></tr>
+    <tr><td>Oficios principales</td><td>Electricidad</td><td>14 AWG para 15 A, 12 AWG para 20 A; GFCI en baños, cubiertas de cocina, cocheras y exteriores</td></tr>
+    <tr><td>Oficios principales</td><td>Plomería</td><td>Pendiente de ¼ de pulgada por pie en drenajes de 3 pulgadas o menos; los ventiladores protegen el sello de la trampa; dos correas sísmicas en el calentador</td></tr>
+    <tr><td>Estructura</td><td>Pernos de anclaje</td><td>½ pulgada, a ≤ 6 pies, a 12 pulgadas de los extremos; soleras tratadas sobre concreto</td></tr>
+    <tr><td>Estructura</td><td>Soleras superiores</td><td>Dobles, con juntas desfasadas ≥ 24 pulgadas</td></tr>
+    <tr><td>Estructura</td><td>Escaleras y barandales</td><td>Peralte ≤ 7¾ pulgadas, huella ≥ 10 pulgadas; barandal de 36 pulgadas en vivienda y 42 en comercial</td></tr>
+    <tr><td>Estructura</td><td>Estuco</td><td>Rayado → nivelación → acabado</td></tr>
+    <tr><td>Acabados</td><td>Tablaroca</td><td>Tipo X resistente al fuego; MR resistente a la humedad</td></tr>
+    <tr><td>Acabados</td><td>Ventanas de escape</td><td>5.7 pies cuadrados netos (5.0 en planta baja); antepecho ≤ 44 pulgadas</td></tr>
+    <tr><td>Acabados</td><td>Techos y alarmas</td><td>Cuartos habitables ≥ 7 pies; alarmas de humo en recámaras, afuera de los dormitorios y en cada piso</td></tr>
+    <tr><td>Seguridad</td><td>Escaleras y tránsito</td><td>Escalera extensible 3 pies arriba del descanso; abanderados con paleta STOP/SLOW</td></tr>
+  </tbody></table>
+  <p class="small">Referencias: <a href="https://cslb.ca.gov/Resources/StudyGuides/LawStudyGuide.pdf">guía de estudio de Leyes y Negocios de CSLB</a> · <a href="https://cslb.ca.gov/Resources/StudyGuides/BStudyGuide.pdf">guía de estudio de Construcción General de CSLB</a> · CSLB <i>California Contractors License Law &amp; Reference Book</i>.</p>
+</div>
+</main>
+<footer id="foot" class="foot"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -34,7 +34,7 @@ export default async function handler(req, res) {
   try { city = decodeURIComponent(req.headers['x-vercel-ip-city'] || '').slice(0, 80) || null; } catch {}
   if (type === 'view') {
     let ref = null;
-    try { const h = new URL(b.ref).hostname.replace(/^www\./, ''); ref = /(^|\.)cslb\.vercel\.app$/.test(h) ? 'internal' : h.slice(0, 100); } catch {}
+    try { const h = new URL(b.ref).hostname.replace(/^www\./, ''); ref = /(^|\.)(cslb\.vercel\.app|cslbexam\.org)$/.test(h) ? 'internal' : h.slice(0, 100); } catch {}
     await sql`INSERT INTO hits (day, page, n) VALUES (${day}, ${page}, 1) ON CONFLICT (day, page) DO UPDATE SET n = hits.n + 1`;
     await sql`INSERT INTO events (day, type, page, ref, lang, device, region, city, vid, sid, pv, nv)
       VALUES (${day}, 'view', ${page}, ${ref}, ${lang}, ${device}, ${region}, ${city}, ${vid}, ${sid}, ${pv}, ${b.nv ? true : null})`;

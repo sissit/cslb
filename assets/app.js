@@ -4,7 +4,7 @@ const store={
   get(k,d){try{const v=localStorage.getItem('cslb-'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem('cslb-'+k,JSON.stringify(v))}catch(e){}}
 };
-const lang=['zh','es'].includes(store.get('lang','en'))?store.get('lang','en'):'en';
+const lang=/^\/zh\//.test(location.pathname)?'zh':/^\/es\//.test(location.pathname)?'es':'en';store.set('lang',lang);
 const EN=lang==='en',ES=lang==='es';
 document.documentElement.lang={zh:'zh-CN',en:'en',es:'es'}[lang];
 /* Spanish: swap in Spanish translation and explanation */
@@ -45,14 +45,15 @@ const S={
 const t=S[lang];
 const PAGES=['index.html','practice.html','exam.html','notes.html','guide.html'];
 let here=location.pathname.split('/').pop()||'index.html';if(!here.endsWith('.html'))here+='.html';
+const section=/^notes-/.test(here)?'notes.html':here;
 
 document.addEventListener('DOMContentLoaded',()=>{
   const h=document.getElementById('top');
   if(h){
-    h.innerHTML=`<div class="wrap"><a class="mark" href="index.html"><i></i><span>${t.brand}</span></a>
-      <nav class="nav" aria-label="${t.navl}">${PAGES.map((u,k)=>`<a href="${u}"${here===u?' aria-current="page"':''}>${t.nav[k]}</a>`).join('')}</nav>
+    h.innerHTML=`<div class="wrap"><a class="mark" href="./"><i></i><span>${t.brand}</span></a>
+      <nav class="nav" aria-label="${t.navl}">${PAGES.map((u,k)=>`<a href="${u==='index.html'?'./':u}"${section===u?' aria-current="page"':''}>${t.nav[k]}</a>`).join('')}</nav>
       <div class="langs" role="group" aria-label="Language">${[['en','EN'],['zh','中文'],['es','ES']].map(([k,n])=>`<button class="lang" data-lang="${k}" aria-pressed="${lang===k}">${n}</button>`).join('')}</div></div>`;
-    h.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{if(b.dataset.lang!==lang)track({type:'ev',name:'lang',detail:b.dataset.lang});store.set('lang',b.dataset.lang);location.reload()});
+    h.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{const k=b.dataset.lang;if(k===lang)return;track({type:'ev',name:'lang',detail:k});store.set('lang',k);location.href=(k==='en'?'/':'/'+k+'/')+(here==='index.html'?'':here)+(location.hash?location.hash.replace(/-(en|es)$/,'')+(k==='zh'?'':'-'+k):'')});
   }
   for(const c of document.querySelectorAll('.stack td')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;const hd=c.closest('table').rows[0].cells[i];c.dataset.l=hd?hd.innerText.trim():''}
   const f=document.getElementById('foot');
@@ -68,7 +69,7 @@ let vid=store.get('vid',''),newVisitor=false;if(!/^[0-9a-f]{16}$/.test(vid)){vid
 let ss=store.get('ss',null);if(!ss||!ss.id||Date.now()-ss.t>1800000)ss={id:rid(),t:0};
 const pv=rid();
 function track(o){if(/^(localhost|127\.)/.test(location.hostname))return;ss.t=Date.now();store.set('ss',ss);
-  try{navigator.sendBeacon('/api/hit',JSON.stringify(Object.assign({lang,vid,sid:ss.id,pv,page:here},o)))}catch(e){}}
+  try{navigator.sendBeacon('/api/hit',JSON.stringify(Object.assign({lang,vid,sid:ss.id,pv,page:section},o)))}catch(e){}}
 let shown=document.visibilityState==='visible'?Date.now():0,stay=0;
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){if(shown){stay+=Date.now()-shown;shown=0}track({type:'leave',dur:Math.round(stay/1000)})}else shown=Date.now()});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="http"]');if(a&&a.hostname!==location.hostname)track({type:'ev',name:'out',detail:(a.hostname.replace(/^www\./,'')+a.pathname).slice(0,200)})});

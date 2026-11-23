@@ -28,7 +28,7 @@ async function notify(f) {
   const rows = [['类型', KIND_ZH[f.kind]], ['题号', f.qid], ['页面', f.page], ['语言', LANG_ZH[f.lang]], ['联系方式', f.contact]]
     .filter(r => r[1]).map(([k, v]) => `<tr><td style="color:#666;padding:2px 12px 2px 0">${k}</td><td>${esc(v)}</td></tr>`).join('');
   const html = `<p style="white-space:pre-wrap;font-size:15px">${esc(f.message)}</p><table style="font-size:14px">${rows}</table>
-    <p><a href="https://cslb.vercel.app/admin/">打开后台处理</a></p>`;
+    <p><a href="https://cslbexam.org/admin/">打开后台处理</a></p>`;
   const reply = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.contact || '') ? f.contact : undefined;
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',

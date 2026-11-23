@@ -1,0 +1,11 @@
+{
+  "redirects": [
+    { "source": "/:path*", "has": [{ "type": "host", "value": "cslb.vercel.app" }], "destination": "https://cslbexam.org/:path*", "permanent": true },
+    { "source": "/src/:path*", "destination": "/:path*", "permanent": true },
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/zh/index.html", "destination": "/zh/", "permanent": true },
+    { "source": "/es/index.html", "destination": "/es/", "permanent": true },
+    { "source": "/zh", "destination": "/zh/", "permanent": true },
+    { "source": "/es", "destination": "/es/", "permanent": true }
+  ]
+}
