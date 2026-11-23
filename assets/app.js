@@ -52,17 +52,26 @@ document.addEventListener('DOMContentLoaded',()=>{
     h.innerHTML=`<div class="wrap"><a class="mark" href="index.html"><i></i><span>${t.brand}</span></a>
       <nav class="nav" aria-label="${t.navl}">${PAGES.map((u,k)=>`<a href="${u}"${here===u?' aria-current="page"':''}>${t.nav[k]}</a>`).join('')}</nav>
       <div class="langs" role="group" aria-label="Language">${[['en','EN'],['zh','中文'],['es','ES']].map(([k,n])=>`<button class="lang" data-lang="${k}" aria-pressed="${lang===k}">${n}</button>`).join('')}</div></div>`;
-    h.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{store.set('lang',b.dataset.lang);location.reload()});
+    h.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{if(b.dataset.lang!==lang)track({type:'ev',name:'lang',detail:b.dataset.lang});store.set('lang',b.dataset.lang);location.reload()});
   }
   for(const c of document.querySelectorAll('.stack td')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;const hd=c.closest('table').rows[0].cells[i];c.dataset.l=hd?hd.innerText.trim():''}
   const f=document.getElementById('foot');
   if(f)f.innerHTML=`<div class="wrap"><p>${t.foot1}</p><p>${t.foot2}</p></div>`;
   const tt=document.querySelector(`meta[name=title-${lang}]`);if(lang!=='en'&&tt)document.title=tt.content;
   if(h)feedbackUI();
-  if(h)track({page:here,ref:document.referrer});
+  if(h)track({ref:document.referrer,nv:newVisitor});
 });
 
-function track(o){if(/^(localhost|127\.)/.test(location.hostname))return;try{navigator.sendBeacon('/api/hit',JSON.stringify(Object.assign({lang},o)))}catch(e){}}
+/* analytics: random local visitor id (no IP), 30-min sessions, time on page, a few events */
+const rid=()=>{const a=new Uint8Array(8);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')};
+let vid=store.get('vid',''),newVisitor=false;if(!/^[0-9a-f]{16}$/.test(vid)){vid=rid();newVisitor=true;store.set('vid',vid)}
+let ss=store.get('ss',null);if(!ss||!ss.id||Date.now()-ss.t>1800000)ss={id:rid(),t:0};
+const pv=rid();
+function track(o){if(/^(localhost|127\.)/.test(location.hostname))return;ss.t=Date.now();store.set('ss',ss);
+  try{navigator.sendBeacon('/api/hit',JSON.stringify(Object.assign({lang,vid,sid:ss.id,pv,page:here},o)))}catch(e){}}
+let shown=document.visibilityState==='visible'?Date.now():0,stay=0;
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){if(shown){stay+=Date.now()-shown;shown=0}track({type:'leave',dur:Math.round(stay/1000)})}else shown=Date.now()});
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="http"]');if(a&&a.hostname!==location.hostname)track({type:'ev',name:'out',detail:(a.hostname.replace(/^www\./,'')+a.pathname).slice(0,200)})});
 /* feedback */
 function feedbackUI(){
   const b=document.createElement('button');b.type='button';b.className='fbbtn';b.textContent=t.fb;b.onclick=()=>openFeedback();
@@ -83,7 +92,7 @@ function feedbackUI(){
     if(e.submitter&&e.submitter.value==='cancel')return;
     e.preventDefault();const btn=d.querySelector('#fbsend');btn.disabled=true;m.textContent='';
     try{const r=await fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:f.kind.value,qid:f.qid.value.trim().toUpperCase(),message:f.message.value,contact:f.contact.value,website:f.website.value,page:location.pathname,lang})});
-      if(!r.ok)throw 0;m.textContent=t.fbThanks;f.message.value='';setTimeout(()=>d.close(),1600)}
+      if(!r.ok)throw 0;track({type:'ev',name:'feedback',detail:f.kind.value+(f.qid.value.trim()?' '+f.qid.value.trim().toUpperCase():'')});m.textContent=t.fbThanks;f.message.value='';setTimeout(()=>d.close(),1600)}
     catch(_){m.textContent=t.fbErr}finally{btn.disabled=false}
   };
   document.addEventListener('click',e=>{const q=e.target.closest('[data-fb]');if(q)openFeedback(q.dataset.fb)});
@@ -138,6 +147,7 @@ function practice(el,list,onEmpty){
   list=mix(list);
   const pg=document.getElementById('pg');
   if(!list.length){el.innerHTML=onEmpty;if(pg)pg.style.width='0';return}
+  track({type:'ev',name:'practice_start',n:list.length,detail:(()=>{const xs=[...new Set(list.map(x=>x.x))],ts=[...new Set(list.map(x=>x.t))];return (location.hash==='#wrong'?'wrong ':'')+xs.join('+')+(ts.length===1?':'+ts[0]:'')})()});
   let i=0;const ans=new Array(list.length).fill(null);
   const show=()=>{
     const x=list[i],p=ans[i],done=p!==null;
@@ -148,7 +158,7 @@ function practice(el,list,onEmpty){
     <div class="qnav"><button class="btn" id="prev" ${i===0?'disabled':''}>${t.prev}</button><button class="btn pri" id="next" ${done?'':'disabled'}>${i===list.length-1?t.result:t.next}</button></div></div>`;
     el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ans[i]=+b.dataset.k;markWrong(x.id,ans[i]!==x.a);show();document.getElementById('next').focus()});
     document.getElementById('prev').onclick=()=>{i--;show()};
-    document.getElementById('next').onclick=()=>{if(i<list.length-1){i++;show()}else{if(pg)pg.style.width='100%';results(el,list,ans,()=>practice(el,list,onEmpty))}};
+    document.getElementById('next').onclick=()=>{if(i<list.length-1){i++;show()}else{if(pg)pg.style.width='100%';track({type:'ev',name:'practice',n:list.length,score:Math.round(list.filter((x,k)=>ans[k]===x.a).length/list.length*100)});results(el,list,ans,()=>practice(el,list,onEmpty))}};
   };
   show();
 }
@@ -156,6 +166,7 @@ function practice(el,list,onEmpty){
 /* exam: timed, no feedback until submit */
 function exam(el,list,minutes,timerEl){
   list=mix(list);
+  track({type:'ev',name:'exam_start',detail:store.get('e-paper','law'),n:list.length});
   let i=0,left=minutes*60,tid=null;const ans=new Array(list.length).fill(null),flag=new Set();
   const pg=document.getElementById('pg');
   const fmt=s=>`${Math.floor(s/3600)}:${String(Math.floor(s%3600/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;

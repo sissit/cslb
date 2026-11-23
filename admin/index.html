@@ -36,6 +36,13 @@
 .kv .bar{height:6px;background:var(--red);opacity:.35;margin-top:2px}
 .chart i b{position:absolute;left:0;right:0;border-top:2px solid var(--ink)}
 .card small{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.visit{border-top:1px solid var(--rule);padding:10px 0;font-size:14px}
+.visit .top{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--mute);font-size:13px}
+.badge.nv{background:#1f7a4d;color:#fff}.badge.rv{background:var(--ink);color:var(--bg);cursor:pointer}
+.path{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.path li{background:var(--panel);padding:2px 8px}.path li.e{background:none;border:1px solid var(--red);color:var(--red)}
+.path li small{color:var(--mute);margin-inline-start:4px}
+#guide{max-width:760px}#guide h2{margin-top:32px}
 </style>
 </head>
 <body>
@@ -48,15 +55,20 @@
   </form>
   <main id="app" hidden>
     <header><h1>CSLB 备考 · 后台</h1><a class="btn" href="../">回到网站</a><button class="btn" id="reload">刷新</button><button class="btn" id="logout">退出</button></header>
-    <div class="filters tabs" role="tablist"><button class="chip" data-tab="traffic" role="tab">流量</button><button class="chip" data-tab="fb" role="tab">意见 <small id="fbcount"></small></button></div>
+    <div class="filters tabs" role="tablist"><button class="chip" data-tab="traffic" role="tab">流量</button><button class="chip" data-tab="fb" role="tab">意见 <small id="fbcount"></small></button><button class="chip" data-tab="guide" role="tab">申请指南</button></div>
     <section id="traffic">
       <div class="cards" id="cards"></div>
       <h3>最近 30 天</h3>
       <p class="small">红柱为浏览量，深色线为访客数（美国中部时间）。鼠标移到柱子上看具体数字。</p>
       <div class="chart" id="chart"></div><div class="axis" id="axis"></div>
       <div class="grid" id="tables"></div>
-      <p class="small">来源、地区、设备、语言、时段为最近 30 天。访客数按“同一天、同一网络、同一浏览器”去重，只存不可逆的当日哈希，不存 IP，无法跨天追踪个人。来源、地区、设备等明细从 2026-11-23 开始记录。</p>
+      <h3 style="margin-top:28px">访问记录（最近 30 天，最多 300 次）</h3>
+      <p class="small">一次访问 = 同一浏览器 30 分钟内连续的浏览。灰色块是看过的页面和停留时间，红框是操作。点“第 N 次访问”只看这位访客。</p>
+      <div class="filters" id="vfilters"></div>
+      <div id="visits"></div>
+      <p class="small">访客用浏览器本地生成的随机编号区分，不存 IP，位置只到城市（由 Vercel 根据网络估算，可能不准）。清除浏览器数据或换设备会算作新访客。新访客、回访、城市、停留时间和操作从 2026-11-23 开始记录。</p>
     </section>
+    <section id="guide" hidden></section>
     <section id="fb" hidden>
       <div class="filters" id="filters"></div>
       <div id="list"></div>
@@ -84,15 +96,41 @@ const PAPER={law:'法律与商务',b:'B 类专业',all:'两门混合','':'未知
 const DEV={mobile:'手机',desktop:'电脑',tablet:'平板','':'未知'};
 const REF=k=>k===''?'直接访问 / 书签':k==='internal'?'站内跳转':k;
 const REG=k=>{if(!k)return '未知';const [c,r]=k.split('-');const C={US:'美国',CN:'中国',CA:'加拿大',MX:'墨西哥',TW:'台湾',HK:'香港'}[c]||c;return r?`${C} · ${r}`:C};
-let tab=sessionStorage.getItem('cslb-admin-tab')||'traffic';
+let tab=sessionStorage.getItem('cslb-admin-tab')||'traffic',vf='all';
+const TOP=window.TOPICS||{};
+const EVN={lang:'切换语言',feedback:'提交意见',practice:'练习完成',practice_start:'开始练习',exam_start:'开始模拟考试',out:'点击外链',exam:'模拟考试交卷'};
+const dur=s=>s==null?'':s<60?`${s} 秒`:`${Math.floor(s/60)} 分 ${s%60} 秒`;
+const tm=t=>new Date(t).toLocaleString('zh-CN',{timeZone:'America/Chicago',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+const CITY=k=>{const [c,r]=k.split('|');return [c,REG(r)].filter(Boolean).join(' · ')||'未知'};
+function evText(e){
+  if(e.type==='exam')return `交卷 ${PAPER[e.paper]||''} ${e.score}%（${e.n} 题）`;
+  const d=e.detail||'';
+  if(e.name==='lang')return `切换到${LANG[d]||d}`;
+  if(e.name==='feedback'){const [k,q]=d.split(' ');return `提意见：${KIND[k]||k}${q?' '+q:''}`}
+  if(e.name==='practice')return `练习完成 ${e.score}%（${e.n} 题）`;
+  if(e.name==='practice_start'){const w=d.startsWith('wrong ');const [xs,tp]=d.replace('wrong ','').split(':');const x=xs.split('+').map(k=>PAPER[k]||k).join('+');return `${w?'错题本':'开始练习'} ${x}${tp?' · '+((TOP[xs]||{})[tp]||tp):''}（${e.n} 题）`}
+  if(e.name==='exam_start')return `开始模拟考试 ${PAPER[d]||d}（${e.n} 题）`;
+  if(e.name==='out')return `外链 ${esc(d)}`;
+  return e.name||e.type;
+}
+function visitHTML(v){
+  const n=v.prior+1,steps=v.ev.filter(e=>e.type!=='leave');
+  const total=steps.reduce((a,e)=>a+(e.type==='view'&&e.dur?e.dur:0),0);
+  return `<div class="visit"><div class="top"><b style="color:var(--ink)">${tm(v.t0)}</b>
+    ${n===1?'<span class="badge nv">新访客</span>':`<span class="badge rv" data-vid="${v.vid}" title="只看这位访客">第 ${n} 次访问</span>`}
+    <span>${esc(REF(v.ref||''))}</span><span>${esc(CITY((v.city||'')+'|'+(v.region||'')))}</span><span>${DEV[v.device]||''}</span><span>${LANG[v.lang]||''}</span>${total?`<span>共 ${dur(total)}</span>`:''}</div>
+    <ol class="path">${steps.map((e,k)=>e.type==='view'?`<li>${PG[e.page]||e.page}${e.dur!=null?`<small>${dur(e.dur)}</small>`:''}</li>`:`<li class="e">${evText(e)}</li>`).join('')}</ol></div>`;
+}
 function kv(title,rows,fmt){const tot=rows.reduce((a,r)=>a+r.n,0)||1;
   return `<div><h3>${title}</h3>${rows.length?`<table class="kv">${rows.map(r=>`<tr><td>${esc(fmt?fmt(r.k):r.k)}<div class="bar" style="width:${r.n/tot*100}%"></div></td><td class="n">${r.n}</td></tr>`).join('')}</table>`:'<p class="small">还没有数据</p>'}</div>`}
 function render(){
   document.querySelectorAll('[data-tab]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.tab===tab);b.onclick=()=>{tab=b.dataset.tab;sessionStorage.setItem('cslb-admin-tab',tab);render()}});
-  $('#traffic').hidden=tab!=='traffic';$('#fb').hidden=tab!=='fb';
+  $('#traffic').hidden=tab!=='traffic';$('#fb').hidden=tab!=='fb';$('#guide').hidden=tab!=='guide';
+  if(!$('#guide').innerHTML)$('#guide').innerHTML=data.guide||'';
   const pending=data.feedback.filter(f=>f.status==='new').length;$('#fbcount').textContent=pending||'';
   const v=data.visitors;
-  $('#cards').innerHTML=[['今天',data.today,v.today],['最近 7 天',data.week,v.week],['最近 30 天',data.month,v.month],['累计',data.total,v.total]].map(([k,n,u])=>`<div class="card"><span>${k}</span><b>${n}</b><small>浏览 · 访客 ${u}</small></div>`).join('');
+  const nr=data.nr||{};
+  $('#cards').innerHTML=[['今天',data.today,v.today,'today'],['最近 7 天',data.week,v.week,'week'],['最近 30 天',data.month,v.month,'month'],['累计',data.total,v.total,'total']].map(([k,n,u,p])=>`<div class="card"><span>${k}</span><b>${n}</b><small>浏览 · 访客 ${u}</small><small>新访客 ${nr['new_'+p]||0} · 回访 ${nr['ret_'+p]||0}</small></div>`).join('');
   const byDay=Object.fromEntries(data.days.map(d=>[d.day,d])),slots=[];
   const today=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Chicago'}));
   for(let k=29;k>=0;k--){const d=new Date(today);d.setDate(d.getDate()-k);const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');const o=byDay[key]||{n:0,v:0};slots.push([key,o.n,o.v||0])}
@@ -101,11 +139,16 @@ function render(){
   $('#axis').innerHTML=`<span>${slots[0][0].slice(5)}</span><span>今天</span>`;
   const hrs=Array.from({length:24},(_,h)=>({k:`${String(h).padStart(2,'0')}:00`,n:(data.hours.find(x=>x.h===h)||{n:0}).n})).filter(r=>r.n);
   $('#tables').innerHTML=[
-    kv('来源网站',data.refs,REF),kv('地区',data.regions,REG),kv('设备',data.devices,k=>DEV[k]||k),
+    kv('来源网站',data.refs,REF),kv('城市（访客数）',data.cities||[],CITY),kv('地区',data.regions,REG),kv('设备',data.devices,k=>DEV[k]||k),
     kv('网站语言',data.langs,k=>LANG[k]||'未知'),kv('页面（最近 30 天）',data.pages,k=>PG[k]||k),kv('页面（累计）',data.allPages,k=>PG[k]||k),
-    kv('访问时段（中部时间）',hrs),
+    kv('访问时段（中部时间）',hrs),kv('操作（最近 30 天）',data.evs||[],k=>EVN[k]||k),
     `<div><h3>模拟考试交卷</h3>${data.exams.length?`<table class="kv"><tr><td class="small">试卷</td><td class="n small">次数</td><td class="n small">平均分</td><td class="n small">通过率</td></tr>${data.exams.map(e=>`<tr><td>${PAPER[e.paper]||e.paper}</td><td class="n">${e.n}</td><td class="n">${e.avg}%</td><td class="n">${e.pass}%</td></tr>`).join('')}</table><p class="small">通过线按 72% 计。</p>`:'<p class="small">还没有人交卷</p>'}</div>`
   ].join('');
+  const VS=data.visits||[],vlist=VS.filter(x=>vf==='all'||(vf==='new'?x.prior===0:vf==='ret'?x.prior>0:x.vid===vf));
+  $('#vfilters').innerHTML=[['all','全部',VS.length],['new','新访客',VS.filter(x=>x.prior===0).length],['ret','回访',VS.filter(x=>x.prior>0).length]].map(([k,n,c])=>`<button class="chip" data-vf="${k}" aria-pressed="${vf===k}">${n} <small>${c}</small></button>`).join('')+(['all','new','ret'].includes(vf)?'':`<button class="chip" data-vf="${vf}" aria-pressed="true">这位访客 <small>${vlist.length}</small></button>`);
+  $('#visits').innerHTML=vlist.length?vlist.map(visitHTML).join(''):'<p class="small">还没有访问记录。</p>';
+  document.querySelectorAll('[data-vf]').forEach(b=>b.onclick=()=>{vf=b.dataset.vf;render()});
+  document.querySelectorAll('[data-vid]').forEach(b=>b.onclick=()=>{vf=b.dataset.vid;render();$('#vfilters').scrollIntoView({block:'start'})});
   const cnt=s=>data.feedback.filter(f=>s==='all'||f.status===s).length;
   $('#filters').innerHTML=[['new','待处理'],['done','已处理'],['ignored','忽略'],['all','全部']].map(([k,n])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${n} <small>${cnt(k)}</small></button>`).join('');
   document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;render()});
