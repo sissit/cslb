@@ -1,6 +1,6 @@
 # CSLB 备考
 
-面向华人承包商的加州 CSLB 承包商执照备考网站：中英对照题库、限时模拟考试、知识点讲义和执照申请指南。网站界面、解析、讲义和指南都有中文、英文、西班牙语三个版本，页头一键切换。
+面向华人承包商的加州 CSLB 承包商执照备考网站：中英西三语题库、限时模拟考试、知识点讲义和执照申请指南。网站界面、解析、讲义和指南都有中文、英文、西班牙语三个版本，页头一键切换。
 
 Trilingual (Chinese/English/Spanish) California CSLB license prep: practice questions, timed mock exams, study notes and a license guide.
 

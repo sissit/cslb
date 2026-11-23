@@ -120,3 +120,5 @@ html:not([lang=es]) .l-es{display:none!important}
 .lang:focus-visible{outline:3px solid var(--slate);outline-offset:2px}
 @media(max-width:760px){.top .mark{width:auto;order:0}.langs{order:1}.nav{order:2;width:100%}}
 .src{display:block;margin-top:8px;font-size:13px;color:var(--mute)}
+
+ul.links{columns:2;column-gap:32px;padding-inline-start:18px}ul.links li{break-inside:avoid;margin-bottom:6px}@media(max-width:600px){ul.links{columns:1}}
