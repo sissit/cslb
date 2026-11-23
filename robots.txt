@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://cslb.vercel.app/sitemap.xml
