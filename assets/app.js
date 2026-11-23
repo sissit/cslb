@@ -87,7 +87,6 @@ function feedbackUI(){
     <div class="qnav"><button class="btn" value="cancel" formnovalidate>${t.fbCancel}</button><button class="btn pri" id="fbsend" value="send">${t.fbSend}</button></div></form>`;
   document.body.appendChild(d);
   const f=d.querySelector('form'),m=d.querySelector('.fbmsg'),qr=d.querySelector('.fbqrow');
-  f.kind.onchange=()=>{qr.hidden=f.kind.value!=='question'};
   f.onsubmit=async e=>{
     if(e.submitter&&e.submitter.value==='cancel')return;
     e.preventDefault();const btn=d.querySelector('#fbsend');btn.disabled=true;m.textContent='';
@@ -99,7 +98,7 @@ function feedbackUI(){
 }
 function openFeedback(qid){
   const d=document.querySelector('.fbdlg');if(!d)return;const f=d.querySelector('form');
-  f.kind.value=qid?'question':'idea';f.qid.value=qid||'';d.querySelector('.fbqrow').hidden=!qid;d.querySelector('.fbmsg').textContent='';
+  f.kind.value=qid?'question':'idea';f.qid.value=qid||'';d.querySelector('.fbmsg').textContent='';
   d.showModal();(qid?f.message:f.kind).focus();
 }
 
