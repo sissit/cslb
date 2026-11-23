@@ -12,7 +12,7 @@ if(ES&&window.QUESTIONS&&window.QUESTIONS_ES){window.QUESTIONS.forEach(q=>{const
 
 const S={
   zh:{brand:'CSLB 备考',nav:['首页','章节练习','模拟考试','知识点讲义','申请指南'],sw:'EN',swl:'Switch to English',navl:'主导航',
-    fb:'提意见',fbTitle:'提意见',fbKind:'类型',fbKinds:[['question','题目有误'],['site','网站问题'],['idea','建议']],fbQ:'题号',fbMsg:'具体内容',fbPh:'例如：答案应为 C，因为……',fbContact:'联系方式（选填，只用于回复你）',fbSend:'提交',fbCancel:'取消',fbThanks:'已收到，谢谢！我们会尽快核对。',fbErr:'提交失败，请稍后再试。',fbReport:'这题有误？',
+    fb:'提意见',fbTitle:'提意见',fbKind:'类型',fbKinds:[['question','题目有误'],['site','网站问题'],['idea','建议']],fbQ:'题号（选填）',fbMsg:'具体内容',fbPh:'例如：答案应为 C，因为……',fbContact:'联系方式（选填，只用于回复你）',fbSend:'提交',fbCancel:'取消',fbThanks:'已收到，谢谢！我们会尽快核对。',fbErr:'提交失败，请稍后再试。',fbReport:'这题有误？',
     foot1:'本站为独立的备考学习网站，与加州承包商执照委员会（CSLB）无任何关联。题目为根据公开法规原创编写的练习题，不是 CSLB 真题；法规数字以 2026 年为准，正式申请和考试请以 <a href="https://www.cslb.ca.gov">cslb.ca.gov</a> 为准。本站内容不构成法律意见。',
     foot2:'最后更新 2026-11-22 · 代码 MIT · 题库与讲义 CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">GitHub 源码</a>',
     law:'法律与商务',b:'B 类专业',qn:(i,n)=>`第 ${i} / ${n} 题`,answered:n=>`已答 ${n}`,prev:'上一题',next:'下一题',result:'看成绩',
@@ -22,7 +22,7 @@ const S={
     barnote:'红线为约 72% 的参考及格线（来自公开备考资料，实际以考试通知为准）。答错的题已加入错题本。',
     review:'错题回顾',src:'出处',your:'你的答案：',none:'未作答',right2:'正确：',all:'全部答对。',again:'再来一次',towrong:'去错题本',qlabel:k=>`第 ${k} 题`},
   en:{brand:'CSLB Prep',nav:['Home','Practice','Mock exam','Study notes','License guide'],sw:'中文',swl:'切换到中文',navl:'Main',
-    fb:'Feedback',fbTitle:'Send feedback',fbKind:'Type',fbKinds:[['question','Error in a question'],['site','Website problem'],['idea','Suggestion']],fbQ:'Question',fbMsg:'Details',fbPh:'e.g. The answer should be C because…',fbContact:'Email or phone (optional, only to reply to you)',fbSend:'Send',fbCancel:'Cancel',fbThanks:'Received, thank you! We will check it soon.',fbErr:'Could not send. Please try again later.',fbReport:'Report an error',
+    fb:'Feedback',fbTitle:'Send feedback',fbKind:'Type',fbKinds:[['question','Error in a question'],['site','Website problem'],['idea','Suggestion']],fbQ:'Question no. (optional)',fbMsg:'Details',fbPh:'e.g. The answer should be C because…',fbContact:'Email or phone (optional, only to reply to you)',fbSend:'Send',fbCancel:'Cancel',fbThanks:'Received, thank you! We will check it soon.',fbErr:'Could not send. Please try again later.',fbReport:'Report an error',
     foot1:'An independent study site, not affiliated with the California Contractors State License Board (CSLB). Questions are original practice items written from public law, not actual CSLB exam questions; figures are as of 2026. For official applications and exams, rely on <a href="https://www.cslb.ca.gov">cslb.ca.gov</a>. Nothing here is legal advice.',
     foot2:'Last updated 2026-11-22 · Code MIT · Questions and notes CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">Source on GitHub</a>',
     law:'Law & Business',b:'General Building (B)',qn:(i,n)=>`Question ${i} of ${n}`,answered:n=>`${n} answered`,prev:'Previous',next:'Next',result:'See score',
@@ -32,7 +32,7 @@ const S={
     barnote:'The red line marks the ~72% reference passing mark (from public prep sources; your exam notice governs). Missed questions were added to your review list.',
     review:'Review missed questions',src:'Source',your:'Your answer: ',none:'blank',right2:'Correct: ',all:'All correct.',again:'Try again',towrong:'Review list',qlabel:k=>`Question ${k}`},
   es:{brand:'CSLB Prep',nav:['Inicio','Práctica','Examen de prueba','Apuntes','Guía de licencia'],navl:'Principal',
-    fb:'Sugerencias',fbTitle:'Enviar comentarios',fbKind:'Tipo',fbKinds:[['question','Error en una pregunta'],['site','Problema del sitio'],['idea','Sugerencia']],fbQ:'Pregunta',fbMsg:'Detalles',fbPh:'p. ej. La respuesta debe ser C porque…',fbContact:'Correo o teléfono (opcional, solo para responderle)',fbSend:'Enviar',fbCancel:'Cancelar',fbThanks:'¡Recibido, gracias! Lo revisaremos pronto.',fbErr:'No se pudo enviar. Intente más tarde.',fbReport:'Reportar un error',
+    fb:'Sugerencias',fbTitle:'Enviar comentarios',fbKind:'Tipo',fbKinds:[['question','Error en una pregunta'],['site','Problema del sitio'],['idea','Sugerencia']],fbQ:'N.º de pregunta (opcional)',fbMsg:'Detalles',fbPh:'p. ej. La respuesta debe ser C porque…',fbContact:'Correo o teléfono (opcional, solo para responderle)',fbSend:'Enviar',fbCancel:'Cancelar',fbThanks:'¡Recibido, gracias! Lo revisaremos pronto.',fbErr:'No se pudo enviar. Intente más tarde.',fbReport:'Reportar un error',
     foot1:'Sitio de estudio independiente, sin relación con la Junta Estatal de Licencias de Contratistas de California (CSLB). Las preguntas son de práctica, escritas a partir de leyes públicas; no son preguntas reales del examen. Datos vigentes a 2026. Para solicitudes y exámenes oficiales, consulte <a href="https://www.cslb.ca.gov">cslb.ca.gov</a>. Nada aquí es asesoría legal.',
     foot2:'Actualizado 2026-11-22 · Código MIT · Preguntas y apuntes CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">Código en GitHub</a>',
     law:'Leyes y Negocios',b:'Construcción General (B)',qn:(i,n)=>`Pregunta ${i} de ${n}`,answered:n=>`${n} respondidas`,prev:'Anterior',next:'Siguiente',result:'Ver resultado',
