@@ -4,7 +4,7 @@ const store={
   get(k,d){try{const v=localStorage.getItem('cslb-'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem('cslb-'+k,JSON.stringify(v))}catch(e){}}
 };
-const lang=['en','es'].includes(store.get('lang','zh'))?store.get('lang','zh'):'zh';
+const lang=['zh','es'].includes(store.get('lang','en'))?store.get('lang','en'):'en';
 const EN=lang==='en',ES=lang==='es';
 document.documentElement.lang={zh:'zh-CN',en:'en',es:'es'}[lang];
 /* Spanish: swap in Spanish translation and explanation */
@@ -48,13 +48,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(h){
     h.innerHTML=`<div class="wrap"><a class="mark" href="index.html"><i></i><span>${t.brand}</span></a>
       <nav class="nav" aria-label="${t.navl}">${PAGES.map((u,k)=>`<a href="${u}"${here===u?' aria-current="page"':''}>${t.nav[k]}</a>`).join('')}</nav>
-      <div class="langs" role="group" aria-label="Language">${[['zh','中文'],['en','EN'],['es','ES']].map(([k,n])=>`<button class="lang" data-lang="${k}" aria-pressed="${lang===k}">${n}</button>`).join('')}</div></div>`;
+      <div class="langs" role="group" aria-label="Language">${[['en','EN'],['zh','中文'],['es','ES']].map(([k,n])=>`<button class="lang" data-lang="${k}" aria-pressed="${lang===k}">${n}</button>`).join('')}</div></div>`;
     h.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{store.set('lang',b.dataset.lang);location.reload()});
   }
   for(const c of document.querySelectorAll('.stack td')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;const hd=c.closest('table').rows[0].cells[i];c.dataset.l=hd?hd.innerText.trim():''}
   const f=document.getElementById('foot');
   if(f)f.innerHTML=`<div class="wrap"><p>${t.foot1}</p><p>${t.foot2}</p></div>`;
-  const tt=document.querySelector(`meta[name=title-${lang}]`);if(lang!=='zh'&&tt)document.title=tt.content;
+  const tt=document.querySelector(`meta[name=title-${lang}]`);if(lang!=='en'&&tt)document.title=tt.content;
 });
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
