@@ -14,6 +14,32 @@ export default async function handler(req, res) {
   if (message.length < 2) return res.status(400).json({ error: 'empty' });
   const [{ n }] = await sql`SELECT count(*)::int AS n FROM feedback WHERE created_at > now() - interval '10 minutes'`;
   if (n > 30) return res.status(429).json({ error: 'busy' });
-  await sql`INSERT INTO feedback (kind, qid, message, contact, page, lang) VALUES (${kind}, ${qid}, ${message}, ${contact}, ${page}, ${lang})`;
+  const [row] = await sql`INSERT INTO feedback (kind, qid, message, contact, page, lang) VALUES (${kind}, ${qid}, ${message}, ${contact}, ${page}, ${lang}) RETURNING id`;
+  try { await notify({ id: row.id, kind, qid, message, contact, page, lang }); } catch (e) { console.error('notify', e); }
   res.status(200).json({ ok: true });
+}
+
+// 新意见邮件通知（Resend，发件域名 notify.lhfirstconstruction.com）
+const KIND_ZH = { question: '题目有误', site: '网站问题', idea: '建议' };
+const LANG_ZH = { zh: '中文', en: '英文', es: '西语' };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+async function notify(f) {
+  if (!process.env.RESEND_API_KEY || !process.env.FEEDBACK_EMAIL) return;
+  const rows = [['类型', KIND_ZH[f.kind]], ['题号', f.qid], ['页面', f.page], ['语言', LANG_ZH[f.lang]], ['联系方式', f.contact]]
+    .filter(r => r[1]).map(([k, v]) => `<tr><td style="color:#666;padding:2px 12px 2px 0">${k}</td><td>${esc(v)}</td></tr>`).join('');
+  const html = `<p style="white-space:pre-wrap;font-size:15px">${esc(f.message)}</p><table style="font-size:14px">${rows}</table>
+    <p><a href="https://cslb.vercel.app/admin/">打开后台处理</a></p>`;
+  const reply = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.contact || '') ? f.contact : undefined;
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: 'CSLB 备考 <cslb@notify.lhfirstconstruction.com>',
+      to: process.env.FEEDBACK_EMAIL.split(',').map(s => s.trim()),
+      reply_to: reply,
+      subject: `[CSLB 备考] 新意见：${KIND_ZH[f.kind]}${f.qid ? ' ' + f.qid : ''} #${f.id}`,
+      html,
+    }),
+  });
+  if (!r.ok) throw new Error('resend ' + r.status + ' ' + (await r.text()));
 }
