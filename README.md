@@ -8,7 +8,7 @@ A free California contractor license (CSLB) study site in English, Chinese and S
 - **章节练习**：按考试大纲分部分练习，附解析、出处和错题本
 - **模拟考试**：法律与商务、B 类总包，限时作答，按部分出分
 - **知识点讲义**：常考的数字、期限和规范要点
-- **申请指南**：申请步骤、费用、免考、外聘 RME
+- **申请指南**：申请步骤、材料、费用、免考和考试
 
 ## 添加题目
 
