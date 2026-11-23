@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>try{if(localStorage.getItem('cslb-lang')==='"en"')document.documentElement.lang='en'}catch(e){}</script>
 <title>模拟考试 · CSLB 备考</title>
-<meta name="description" content="CSLB 法律与商务、B 类总包限时模拟考试，中英对照，交卷后按章节出分。">
+<meta name="title-en" content="Mock exam · CSLB Prep">
+<meta name="description" content="CSLB 法律与商务、B 类总包限时模拟考试，中英对照，交卷后按章节出分。Timed CSLB mock exams with section scores.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
@@ -12,15 +14,15 @@
 <body>
 <header id="top" class="top"></header>
 <main class="wrap narrow band">
-  <h1>模拟考试</h1>
+  <h1><span class="l-zh">模拟考试</span><span class="l-en">Mock exam</span></h1>
   <div id="setup">
-    <p class="lead">和真实考试一样：限时、交卷前不显示答案，可以跳题和标记。按每题约 2 分钟计时。</p>
-    <div class="label">选择试卷</div>
+    <p class="lead"><span class="l-zh">和真实考试一样：限时、交卷前不显示答案，可以跳题和标记。按每题约 2 分钟计时。</span><span class="l-en">Like the real thing: timed, no answers until you submit, and you can skip and flag questions. About 2 minutes per question.</span></p>
+    <div class="label"><span class="l-zh">选择试卷</span><span class="l-en">Choose a test</span></div>
     <div class="chips" id="papers"></div>
-    <div class="row"><label class="chk"><input type="checkbox" data-zh>中文对照</label></div>
+    <div class="row"><label class="chk"><input type="checkbox" data-zh><span class="l-zh">中文对照</span><span class="l-en">Show Chinese</span></label></div>
     <p id="info" class="small"></p>
-    <button class="btn pri" id="go">开始考试</button>
-    <div class="note">真实考试：两门分开考，每门最长约 3.5 小时，全部为英文（或西班牙语）四选一题。题数、时间和及格线以 CSLB 考试通知为准。</div>
+    <button class="btn pri" id="go"><span class="l-zh">开始考试</span><span class="l-en">Start</span></button>
+    <div class="note"><span class="l-zh">真实考试：两门分开考，每门最长约 3.5 小时，全部为英文（或西班牙语）四选一题。题数、时间和及格线以 CSLB 考试通知为准。</span><span class="l-en">The real exams are taken separately, up to about 3.5 hours each, all four-choice questions in English (or Spanish). Your CSLB exam notice sets the number of questions, time and passing score.</span></div>
   </div>
   <div id="run" hidden>
     <div class="meta" style="align-items:center"><span id="pname"></span><span class="timer" id="timer" aria-live="off"></span></div>
@@ -33,15 +35,15 @@
 <script src="assets/app.js"></script>
 <script>
 {
-const {store,shuffle,exam,bindZh}=window.CSLB,Q=window.QUESTIONS;
-const P=[['law','法律与商务'],['b','B 类专业'],['all','综合（两门混合）']];
+const {store,shuffle,exam,bindZh,EN}=window.CSLB,Q=window.QUESTIONS;
+const P=EN?[['law','Law & Business'],['b','General Building (B)'],['all','Combined']]:[['law','法律与商务'],['b','B 类专业'],['all','综合（两门混合）']];
 let pick=store.get('e-paper','law');
 const list=k=>Q.filter(q=>k==='all'||q.x===k);
 function draw(){
-  document.getElementById('papers').innerHTML=P.map(([k,n])=>`<button class="chip" data-p="${k}" aria-pressed="${pick===k}">${n}<small>${list(k).length} 题</small></button>`).join('');
+  document.getElementById('papers').innerHTML=P.map(([k,n])=>`<button class="chip" data-p="${k}" aria-pressed="${pick===k}">${n}<small>${list(k).length}</small></button>`).join('');
   document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{pick=b.dataset.p;store.set('e-paper',pick);draw()});
   const n=list(pick).length;
-  document.getElementById('info').textContent=`${n} 题，限时 ${n*2} 分钟。`;
+  document.getElementById('info').textContent=EN?`${n} questions, ${n*2} minutes.`:`${n} 题，限时 ${n*2} 分钟。`;
 }
 document.getElementById('go').onclick=()=>{
   const qs=shuffle(list(pick));

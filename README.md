@@ -1,6 +1,8 @@
 # CSLB 备考
 
-面向华人承包商的加州 CSLB 承包商执照备考网站：中英对照题库、限时模拟考试、知识点讲义和执照申请指南。
+面向华人承包商的加州 CSLB 承包商执照备考网站：中英对照题库、限时模拟考试、知识点讲义和执照申请指南。网站界面、解析、讲义和指南都有中文和英文两个版本，页头一键切换。
+
+Bilingual (Chinese/English) California CSLB license prep: practice questions, timed mock exams, study notes and a license guide.
 
 - **章节练习** `practice.html`：按 CSLB 考试大纲分部分练习，当场解析，错题本保存在本机浏览器
 - **模拟考试** `exam.html`：限时整套，交卷后按部分出分
@@ -26,7 +28,7 @@ content/questions.js                  题库数据（window.QUESTIONS）
  q:'English stem', z:'中文题干',
  o:[['A','甲'],['B','乙'],['C','丙'],['D','丁']],
  a:1,                                    // 正确选项序号，从 0 开始
- e:'中文解析'}
+ e:'中文解析', ee:'English explanation'}
 ```
 
 本地检查：`node scripts/check.js`

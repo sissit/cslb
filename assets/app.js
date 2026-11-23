@@ -1,34 +1,63 @@
-/* CSLB 备考 · shared header, footer and quiz engine. Code: MIT. */
+/* CSLB 备考 · shared header, footer, language switch and quiz engine. Code: MIT. */
 (function(){
-const PAGES=[['index.html','首页'],['practice.html','章节练习'],['exam.html','模拟考试'],['notes.html','知识点讲义'],['guide.html','申请指南']];
-const here=(location.pathname.split('/').pop()||'index.html').replace(/^$/,'index.html');
-const cur=here.endsWith('.html')?here:(here+'.html');
-
-document.addEventListener('DOMContentLoaded',()=>{
-  const h=document.getElementById('top');
-  if(h)h.innerHTML=`<div class="wrap"><a class="mark" href="index.html"><i></i><span>CSLB 备考</span></a>
-    <nav class="nav" aria-label="主导航">${PAGES.map(([u,t])=>`<a href="${u}"${(cur===u||(cur==='index.html'&&u==='index.html'))?' aria-current="page"':''}>${t}</a>`).join('')}</nav></div>`;
-  const f=document.getElementById('foot');
-  for(const c of document.querySelectorAll('.stack td')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}
-  if(f)f.innerHTML=`<div class="wrap"><p>本站为独立的备考学习网站，与加州承包商执照委员会（CSLB）无任何关联。题目为根据公开法规原创编写的练习题，不是 CSLB 真题；法规数字以 2026 年为准，正式申请和考试请以 <a href="https://www.cslb.ca.gov">cslb.ca.gov</a> 为准。本站内容不构成法律意见。</p>
-    <p>代码 MIT · 题库与讲义 CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">GitHub 源码</a></p></div>`;
-});
-
 const store={
   get(k,d){try{const v=localStorage.getItem('cslb-'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem('cslb-'+k,JSON.stringify(v))}catch(e){}}
 };
-const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const lang=store.get('lang','zh')==='en'?'en':'zh';
+const EN=lang==='en';
+document.documentElement.lang=EN?'en':'zh-CN';
+
+const S={
+  zh:{brand:'CSLB 备考',nav:['首页','章节练习','模拟考试','知识点讲义','申请指南'],sw:'EN',swl:'Switch to English',navl:'主导航',
+    foot1:'本站为独立的备考学习网站，与加州承包商执照委员会（CSLB）无任何关联。题目为根据公开法规原创编写的练习题，不是 CSLB 真题；法规数字以 2026 年为准，正式申请和考试请以 <a href="https://www.cslb.ca.gov">cslb.ca.gov</a> 为准。本站内容不构成法律意见。',
+    foot2:'代码 MIT · 题库与讲义 CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">GitHub 源码</a>',
+    law:'法律与商务',b:'B 类专业',qn:(i,n)=>`第 ${i} / ${n} 题`,answered:n=>`已答 ${n}`,prev:'上一题',next:'下一题',result:'看成绩',
+    right:'答对了',correct:l=>'正确答案：'+l,flag:'标记此题',unflag:'取消标记',submit:'交卷',confirm:n=>`${n?`还有 ${n} 题未作答，`:''}确定交卷吗？`,
+    yes:'确定交卷',no:'继续答题',timeup:'时间到',done:'已交卷',yours:'你的成绩',score:(r,n)=>`${r} / ${n} 题答对`,
+    pass:'达到约 72% 的参考及格线',fail:'未达约 72% 的参考及格线',
+    barnote:'红线为约 72% 的参考及格线（来自公开备考资料，实际以考试通知为准）。答错的题已加入错题本。',
+    review:'错题回顾',your:'你的答案：',none:'未作答',right2:'正确：',all:'全部答对。',again:'再来一次',towrong:'去错题本',qlabel:k=>`第 ${k} 题`},
+  en:{brand:'CSLB Prep',nav:['Home','Practice','Mock exam','Study notes','License guide'],sw:'中文',swl:'切换到中文',navl:'Main',
+    foot1:'An independent study site, not affiliated with the California Contractors State License Board (CSLB). Questions are original practice items written from public law, not actual CSLB exam questions; figures are as of 2026. For official applications and exams, rely on <a href="https://www.cslb.ca.gov">cslb.ca.gov</a>. Nothing here is legal advice.',
+    foot2:'Code MIT · Questions and notes CC BY-NC-SA 4.0 · <a href="https://github.com/sissit/cslb">Source on GitHub</a>',
+    law:'Law & Business',b:'General Building (B)',qn:(i,n)=>`Question ${i} of ${n}`,answered:n=>`${n} answered`,prev:'Previous',next:'Next',result:'See score',
+    right:'Correct',correct:l=>'Answer: '+l,flag:'Flag',unflag:'Unflag',submit:'Submit',confirm:n=>`${n?`${n} unanswered. `:''}Submit the exam?`,
+    yes:'Submit',no:'Keep working',timeup:'Time’s up',done:'Submitted',yours:'Your score',score:(r,n)=>`${r} of ${n} correct`,
+    pass:'At or above the ~72% reference passing mark',fail:'Below the ~72% reference passing mark',
+    barnote:'The red line marks the ~72% reference passing mark (from public prep sources; your exam notice governs). Missed questions were added to your review list.',
+    review:'Review missed questions',your:'Your answer: ',none:'blank',right2:'Correct: ',all:'All correct.',again:'Try again',towrong:'Review list',qlabel:k=>`Question ${k}`}
+};
+const t=S[lang];
+const PAGES=['index.html','practice.html','exam.html','notes.html','guide.html'];
+let here=location.pathname.split('/').pop()||'index.html';if(!here.endsWith('.html'))here+='.html';
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const h=document.getElementById('top');
+  if(h){
+    h.innerHTML=`<div class="wrap"><a class="mark" href="index.html"><i></i><span>${t.brand}</span></a>
+      <nav class="nav" aria-label="${t.navl}">${PAGES.map((u,k)=>`<a href="${u}"${here===u?' aria-current="page"':''}>${t.nav[k]}</a>`).join('')}</nav>
+      <button class="lang" id="lang" aria-label="${t.swl}">${t.sw}</button></div>`;
+    document.getElementById('lang').onclick=()=>{store.set('lang',EN?'zh':'en');location.reload()};
+  }
+  for(const c of document.querySelectorAll('.stack td')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;const hd=c.closest('table').rows[0].cells[i];c.dataset.l=hd?hd.innerText.trim():''}
+  const f=document.getElementById('foot');
+  if(f)f.innerHTML=`<div class="wrap"><p>${t.foot1}</p><p>${t.foot2}</p></div>`;
+  const tt=document.querySelector('meta[name=title-en]');if(EN&&tt)document.title=tt.content;
+});
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const L='ABCD';
-const topicName=q=>(window.TOPICS[q.x]||{})[q.t]||'';
-const examName=x=>x==='law'?'法律与商务':'B 类专业';
+const topicName=q=>((EN?window.TOPICS_EN:window.TOPICS)[q.x]||{})[q.t]||'';
+const examName=x=>x==='law'?t.law:t.b;
+const expl=q=>EN?q.ee:q.e;
 function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a}
 /* shuffle answer choices so the correct letter varies */
 function mix(list){return list.map(q=>{const idx=shuffle([0,1,2,3]);return Object.assign({},q,{o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a)})})}
 function wrongSet(){return new Set(store.get('wrong',[]))}
 function markWrong(id,isWrong){const s=wrongSet();isWrong?s.add(id):s.delete(id);store.set('wrong',[...s])}
 
-/* zh toggle: any checkbox with data-zh */
+/* Chinese-translation toggle: any checkbox with data-zh */
 function bindZh(){
   const on=store.get('zh',true);
   document.body.classList.toggle('hide-zh',!on);
@@ -45,12 +74,12 @@ function results(el,list,ans,again){
   const right=list.filter((x,k)=>ans[k]===x.a).length,n=list.length,pct=Math.round(right/n*100);
   const groups={};list.forEach((x,k)=>{const g=examName(x.x)+' · '+topicName(x);(groups[g]=groups[g]||{r:0,n:0}).n++;if(ans[k]===x.a)groups[g].r++});
   const wrong=list.map((x,k)=>({x,k})).filter(o=>ans[o.k]!==o.x.a);
-  el.innerHTML=`<div class="qcard"><p class="small" style="margin:0">你的成绩</p><p class="score">${pct}%</p>
-  <p class="verdict">${right} / ${n} 题答对 · ${pct>=72?'达到约 72% 的参考及格线':'未达约 72% 的参考及格线'}</p>
+  el.innerHTML=`<div class="qcard"><p class="small" style="margin:0">${t.yours}</p><p class="score">${pct}%</p>
+  <p class="verdict">${t.score(right,n)} · ${pct>=72?t.pass:t.fail}</p>
   <div class="bars">${Object.entries(groups).map(([g,o])=>{const p=Math.round(o.r/o.n*100);return `<div class="bar"><div class="lab"><span>${g}</span><span>${o.r}/${o.n} · ${p}%</span></div><div class="meter" aria-hidden="true"><i style="width:${p}%"></i><b style="left:72%"></b></div></div>`}).join('')}</div>
-  <p class="small">红线为约 72% 的参考及格线（来自公开备考资料，实际以考试通知为准）。答错的题已加入错题本。</p>
-  ${wrong.length?`<h2>错题回顾</h2>${wrong.map(o=>`<div class="rv"><p><b>${esc(o.x.q)}</b></p><p class="zh" style="margin:0">${esc(o.x.z)}</p><p>你的答案：${ans[o.k]===null?'未作答':L[ans[o.k]]} · 正确：${L[o.x.a]}. ${esc(o.x.o[o.x.a][0])}<span class="ozh">${esc(o.x.o[o.x.a][1])}</span></p><p class="zh" style="margin:0">${esc(o.x.e)}</p></div>`).join('')}`:'<p>全部答对。</p>'}
-  <div class="qnav"><button class="btn pri" id="again">再来一次</button><a class="btn" href="practice.html#wrong">去错题本</a></div></div>`;
+  <p class="small">${t.barnote}</p>
+  ${wrong.length?`<h2>${t.review}</h2>${wrong.map(o=>`<div class="rv"><p><b>${esc(o.x.q)}</b></p><p class="zh" style="margin:0">${esc(o.x.z)}</p><p>${t.your}${ans[o.k]===null?t.none:L[ans[o.k]]} · ${t.right2}${L[o.x.a]}. ${esc(o.x.o[o.x.a][0])}<span class="ozh">${esc(o.x.o[o.x.a][1])}</span></p><p class="small" style="margin:0">${esc(expl(o.x))}</p></div>`).join('')}`:`<p>${t.all}</p>`}
+  <div class="qnav"><button class="btn pri" id="again">${t.again}</button><a class="btn" href="practice.html#wrong">${t.towrong}</a></div></div>`;
   document.getElementById('again').onclick=again;
   window.scrollTo({top:0});
 }
@@ -64,10 +93,10 @@ function practice(el,list,onEmpty){
   const show=()=>{
     const x=list[i],p=ans[i],done=p!==null;
     if(pg)pg.style.width=(ans.filter(v=>v!==null).length/list.length*100)+'%';
-    el.innerHTML=`<div class="meta"><span>第 ${i+1} / ${list.length} 题</span><span class="tag">${examName(x.x)} · ${topicName(x)}</span></div>
+    el.innerHTML=`<div class="meta"><span>${t.qn(i+1,list.length)}</span><span class="tag">${examName(x.x)} · ${topicName(x)}</span></div>
     <div class="qcard"><p class="q">${esc(x.q)}</p><p class="zh">${esc(x.z)}</p>${optsHTML(x,p,done)}
-    ${done?`<div class="exp"><b>${p===x.a?'答对了':'正确答案：'+L[x.a]}</b>${esc(x.e)}</div>`:''}
-    <div class="qnav"><button class="btn" id="prev" ${i===0?'disabled':''}>上一题</button><button class="btn pri" id="next" ${done?'':'disabled'}>${i===list.length-1?'看成绩':'下一题'}</button></div></div>`;
+    ${done?`<div class="exp"><b>${p===x.a?t.right:t.correct(L[x.a])}</b>${esc(expl(x))}</div>`:''}
+    <div class="qnav"><button class="btn" id="prev" ${i===0?'disabled':''}>${t.prev}</button><button class="btn pri" id="next" ${done?'':'disabled'}>${i===list.length-1?t.result:t.next}</button></div></div>`;
     el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ans[i]=+b.dataset.k;markWrong(x.id,ans[i]!==x.a);show();document.getElementById('next').focus()});
     document.getElementById('prev').onclick=()=>{i--;show()};
     document.getElementById('next').onclick=()=>{if(i<list.length-1){i++;show()}else{if(pg)pg.style.width='100%';results(el,list,ans,()=>practice(el,list,onEmpty))}};
@@ -82,17 +111,17 @@ function exam(el,list,minutes,timerEl){
   const pg=document.getElementById('pg');
   const fmt=s=>`${Math.floor(s/3600)}:${String(Math.floor(s%3600/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
   const tick=()=>{left--;timerEl.textContent=fmt(Math.max(left,0));timerEl.classList.toggle('low',left<300);if(left<=0)submit(true)};
-  const submit=(auto)=>{clearInterval(tid);timerEl.textContent=auto?'时间到':'已交卷';
+  const submit=auto=>{clearInterval(tid);timerEl.textContent=auto?t.timeup:t.done;
     list.forEach((x,k)=>markWrong(x.id,ans[k]!==x.a));if(pg)pg.style.width='100%';
     results(el,list,ans,()=>exam(el,shuffle(list),minutes,timerEl))};
   const show=()=>{
-    const x=list[i];
-    if(pg)pg.style.width=(ans.filter(v=>v!==null).length/list.length*100)+'%';
-    el.innerHTML=`<div class="meta"><span>第 ${i+1} / ${list.length} 题 · 已答 ${ans.filter(v=>v!==null).length}</span><span class="tag">${examName(x.x)}</span></div>
+    const x=list[i],nA=ans.filter(v=>v!==null).length;
+    if(pg)pg.style.width=(nA/list.length*100)+'%';
+    el.innerHTML=`<div class="meta"><span>${t.qn(i+1,list.length)} · ${t.answered(nA)}</span><span class="tag">${examName(x.x)}</span></div>
     <div class="qcard"><p class="q">${esc(x.q)}</p><p class="zh">${esc(x.z)}</p>${optsHTML(x,ans[i],false)}
-    <div class="qnav"><div class="row"><button class="btn" id="prev" ${i===0?'disabled':''}>上一题</button><button class="btn" id="flag">${flag.has(i)?'取消标记':'标记此题'}</button></div>
-    <div class="row">${i<list.length-1?'<button class="btn pri" id="next">下一题</button>':''}<button class="btn${i===list.length-1?' pri':''}" id="sub">交卷</button></div></div>
-    <div class="pal" aria-label="题号">${list.map((_,k)=>`<button data-k="${k}" class="${ans[k]!==null?'done':''}${k===i?' cur':''}${flag.has(k)?' flag':''}" aria-label="第 ${k+1} 题">${k+1}</button>`).join('')}</div>
+    <div class="qnav"><div class="row"><button class="btn" id="prev" ${i===0?'disabled':''}>${t.prev}</button><button class="btn" id="flag">${flag.has(i)?t.unflag:t.flag}</button></div>
+    <div class="row">${i<list.length-1?`<button class="btn pri" id="next">${t.next}</button>`:''}<button class="btn${i===list.length-1?' pri':''}" id="sub">${t.submit}</button></div></div>
+    <div class="pal">${list.map((_,k)=>`<button data-k="${k}" class="${ans[k]!==null?'done':''}${k===i?' cur':''}${flag.has(k)?' flag':''}" aria-label="${t.qlabel(k+1)}">${k+1}</button>`).join('')}</div>
     <div id="confirm"></div></div>`;
     el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ans[i]=+b.dataset.k;show()});
     el.querySelectorAll('.pal button').forEach(b=>b.onclick=()=>{i=+b.dataset.k;show()});
@@ -101,12 +130,12 @@ function exam(el,list,minutes,timerEl){
     document.getElementById('flag').onclick=()=>{flag.has(i)?flag.delete(i):flag.add(i);show()};
     document.getElementById('sub').onclick=()=>{
       const un=ans.filter(v=>v===null).length;
-      document.getElementById('confirm').innerHTML=`<div class="exp"><b>${un?`还有 ${un} 题未作答，`:''}确定交卷吗？</b><div class="row" style="margin-top:8px"><button class="btn pri" id="yes">确定交卷</button><button class="btn" id="no">继续答题</button></div></div>`;
+      document.getElementById('confirm').innerHTML=`<div class="exp"><b>${t.confirm(un)}</b><div class="row" style="margin-top:8px"><button class="btn pri" id="yes">${t.yes}</button><button class="btn" id="no">${t.no}</button></div></div>`;
       document.getElementById('yes').onclick=()=>submit(false);document.getElementById('no').onclick=show;
     };
   };
   clearInterval(tid);timerEl.textContent=fmt(left);tid=setInterval(tick,1000);show();
 }
 
-window.CSLB={store,esc,shuffle,wrongSet,practice,exam,bindZh,examName,topicName};
+window.CSLB={store,esc,shuffle,wrongSet,practice,exam,bindZh,examName,topicName,EN,lang};
 })();

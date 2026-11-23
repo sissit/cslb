@@ -6,7 +6,7 @@ for(const q of Q){
   const err=m=>{bad++;console.error(q.id+': '+m)};
   if(ids.has(q.id))err('duplicate id');ids.add(q.id);
   if(!T[q.x]||!T[q.x][q.t])err('unknown exam/topic '+q.x+'/'+q.t);
-  if(!q.q||!q.z||!q.e)err('missing text');
+  if(!q.q||!q.z||!q.e||!q.ee)err('missing text');
   if(!Array.isArray(q.o)||q.o.length!==4||q.o.some(o=>o.length!==2||!o[0]||!o[1]))err('options must be 4 [en,zh] pairs');
   if(!(q.a>=0&&q.a<4))err('bad answer index');
   if(new Set(q.o.map(o=>o[0])).size!==4)err('duplicate option');

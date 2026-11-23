@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>try{if(localStorage.getItem('cslb-lang')==='"en"')document.documentElement.lang='en'}catch(e){}</script>
 <title>章节练习 · CSLB 备考</title>
-<meta name="description" content="按 CSLB 考试大纲分章节练习：法律与商务、B 类总包，中英对照，当场解析，错题本。">
+<meta name="title-en" content="Practice by section · CSLB Prep">
+<meta name="description" content="按 CSLB 考试大纲分章节练习：法律与商务、B 类总包，中英对照，当场解析，错题本。Practice CSLB questions by section with instant explanations.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
@@ -12,13 +14,13 @@
 <body>
 <header id="top" class="top"></header>
 <main class="wrap narrow band">
-  <h1>章节练习</h1>
-  <p class="lead">选一门考试和一个部分开始练。每题当场出答案和解析，答错的题会存进本机的错题本。</p>
-  <div class="label">考试</div>
+  <h1><span class="l-zh">章节练习</span><span class="l-en">Practice by section</span></h1>
+  <p class="lead"><span class="l-zh">选一门考试和一个部分开始练。每题当场出答案和解析，答错的题会存进本机的错题本。</span><span class="l-en">Pick an exam and a section. Each answer is checked right away with an explanation, and missed questions are saved to a review list on this device.</span></p>
+  <div class="label"><span class="l-zh">考试</span><span class="l-en">Exam</span></div>
   <div class="chips" id="exams"></div>
-  <div class="label">部分</div>
+  <div class="label"><span class="l-zh">部分</span><span class="l-en">Section</span></div>
   <div class="chips" id="topics"></div>
-  <div class="row"><label class="chk"><input type="checkbox" data-zh>中文对照</label><label class="chk"><input type="checkbox" id="shuf">打乱顺序</label></div>
+  <div class="row"><label class="chk"><input type="checkbox" data-zh><span class="l-zh">中文对照</span><span class="l-en">Show Chinese</span></label><label class="chk"><input type="checkbox" id="shuf"><span class="l-zh">打乱顺序</span><span class="l-en">Shuffle</span></label></div>
   <div class="prog"><i id="pg" style="width:0"></i></div>
   <section id="app" aria-live="polite"></section>
 </main>
@@ -27,7 +29,9 @@
 <script src="assets/app.js"></script>
 <script>
 {
-const {store,shuffle,wrongSet,practice,bindZh}=window.CSLB,Q=window.QUESTIONS,T=window.TOPICS;
+const {store,shuffle,wrongSet,practice,bindZh,EN}=window.CSLB,Q=window.QUESTIONS,T=EN?window.TOPICS_EN:window.TOPICS;
+const W=EN?{law:'Law & Business',b:'General Building',all:'All',wrong:'Review list',allsec:'All sections',emptyW:'Your review list is empty. Questions you miss in practice or mock exams are added here and removed once you answer them correctly.',empty:'No questions in this section yet.'}
+ :{law:'法律与商务',b:'B 类专业',all:'全部',wrong:'错题本',allsec:'全部部分',emptyW:'错题本是空的。做题或模拟考试时答错的题会自动加进来，答对后会移出。',empty:'这个部分还没有题目。'};
 let ex=store.get('p-ex','law'),tp=store.get('p-tp','all');
 if(location.hash==='#wrong'){ex='wrong';tp='all'}
 if(tp!=='all'&&!(T[ex]||{})[tp])tp='all';
@@ -35,18 +39,18 @@ const app=document.getElementById('app');
 function count(x,t){return Q.filter(q=>(x==='all'||q.x===x)&&(t==='all'||q.t===t)).length}
 function draw(){
   const w=wrongSet();
-  const E=[['law','法律与商务'],['b','B 类专业'],['all','全部'],['wrong','错题本']];
+  const E=[['law',W.law],['b',W.b],['all',W.all],['wrong',W.wrong]];
   document.getElementById('exams').innerHTML=E.map(([k,n])=>`<button class="chip" data-e="${k}" aria-pressed="${ex===k}">${n}<small>${k==='wrong'?w.size:count(k,'all')}</small></button>`).join('');
-  const tops=ex==='law'||ex==='b'?Object.entries(T[ex]):[];
-  document.getElementById('topics').innerHTML=[['all','全部部分'],...tops].map(([k,n])=>`<button class="chip" data-t="${k}" aria-pressed="${tp===k}">${n}${ex==='law'||ex==='b'?`<small>${count(ex,k)}</small>`:''}</button>`).join('');
-  document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{ex=b.dataset.e;tp='all';store.set('p-ex',ex==='wrong'?'law':ex);history.replaceState(null,'',ex==='wrong'?'#wrong':location.pathname);draw();run()});
+  const sub=ex==='law'||ex==='b';
+  document.getElementById('topics').innerHTML=[['all',W.allsec],...(sub?Object.entries(T[ex]):[])].map(([k,n])=>`<button class="chip" data-t="${k}" aria-pressed="${tp===k}">${n}${sub?`<small>${count(ex,k)}</small>`:''}</button>`).join('');
+  document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{ex=b.dataset.e;tp='all';if(ex!=='wrong')store.set('p-ex',ex);history.replaceState(null,'',ex==='wrong'?'#wrong':location.pathname);draw();run()});
   document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tp=b.dataset.t;store.set('p-tp',tp);draw();run()});
 }
 function run(){
   const w=wrongSet();
   let list=Q.filter(q=>ex==='wrong'?w.has(q.id):(ex==='all'||q.x===ex)&&(tp==='all'||q.t===tp));
   if(document.getElementById('shuf').checked)list=shuffle(list);
-  practice(app,list,`<div class="empty">${ex==='wrong'?'错题本是空的。做题或模拟考试时答错的题会自动加进来，答对后会移出。':'这个部分还没有题目。'}</div>`);
+  practice(app,list,`<div class="empty">${ex==='wrong'?W.emptyW:W.empty}</div>`);
 }
 document.getElementById('shuf').onchange=run;
 bindZh();draw();run();
