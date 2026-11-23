@@ -19,25 +19,5 @@ export default async function handler(req, res) {
   res.status(200).json({ ok: true });
 }
 
-// 新意见邮件通知：用 Gmail（应用专用密码）发到 FEEDBACK_EMAIL
-import nodemailer from 'nodemailer';
-const KIND_ZH = { question: '题目有误', site: '网站问题', idea: '建议' };
-const LANG_ZH = { zh: '中文', en: '英文', es: '西语' };
-const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-async function notify(f) {
-  const user = process.env.GMAIL_USER, pass = process.env.GMAIL_APP_PASSWORD;
-  if (!user || !pass) return;
-  const rows = [['类型', KIND_ZH[f.kind]], ['题号', f.qid], ['页面', f.page], ['语言', LANG_ZH[f.lang]], ['联系方式', f.contact]]
-    .filter(r => r[1]).map(([k, v]) => `<tr><td style="color:#666;padding:2px 12px 2px 0">${k}</td><td>${esc(v)}</td></tr>`).join('');
-  const html = `<p style="white-space:pre-wrap;font-size:15px">${esc(f.message)}</p><table style="font-size:14px">${rows}</table>
-    <p><a href="https://cslb.vercel.app/admin/">打开后台处理</a></p>`;
-  const reply = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.contact || '') ? f.contact : undefined;
-  const tx = nodemailer.createTransport({ service: 'gmail', auth: { user, pass: pass.replace(/\s/g, '') } });
-  await tx.sendMail({
-    from: `"CSLB 备考" <${user}>`,
-    to: process.env.FEEDBACK_EMAIL || user,
-    replyTo: reply,
-    subject: `[CSLB 备考] 新意见：${KIND_ZH[f.kind]}${f.qid ? ' ' + f.qid : ''} #${f.id}`,
-    html,
-  });
-}
+// 新意见邮件通知：发送方式待定（不用个人 Gmail，也不用公司域名）。在此之前只存进后台。
+async function notify() {}
