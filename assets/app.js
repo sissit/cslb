@@ -59,9 +59,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(f)f.innerHTML=`<div class="wrap"><p>${t.foot1}</p><p>${t.foot2}</p></div>`;
   const tt=document.querySelector(`meta[name=title-${lang}]`);if(lang!=='en'&&tt)document.title=tt.content;
   if(h)feedbackUI();
-  if(h&&!/^(localhost|127\.)/.test(location.hostname))try{navigator.sendBeacon('/api/hit',JSON.stringify({page:here}))}catch(e){}
+  if(h)track({page:here,ref:document.referrer});
 });
 
+function track(o){if(/^(localhost|127\.)/.test(location.hostname))return;try{navigator.sendBeacon('/api/hit',JSON.stringify(Object.assign({lang},o)))}catch(e){}}
 /* feedback */
 function feedbackUI(){
   const b=document.createElement('button');b.type='button';b.className='fbbtn';b.textContent=t.fb;b.onclick=()=>openFeedback();
@@ -161,6 +162,7 @@ function exam(el,list,minutes,timerEl){
   const tick=()=>{left--;timerEl.textContent=fmt(Math.max(left,0));timerEl.classList.toggle('low',left<300);if(left<=0)submit(true)};
   const submit=auto=>{clearInterval(tid);timerEl.textContent=auto?t.timeup:t.done;
     list.forEach((x,k)=>markWrong(x.id,ans[k]!==x.a));if(pg)pg.style.width='100%';
+    track({type:'exam',page:'exam',paper:store.get('e-paper','law'),score:Math.round(list.filter((x,k)=>ans[k]===x.a).length/list.length*100),n:list.length});
     results(el,list,ans,()=>exam(el,shuffle(list),minutes,timerEl))};
   const show=()=>{
     const x=list[i],nA=ans.filter(v=>v!==null).length;

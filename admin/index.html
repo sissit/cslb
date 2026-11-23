@@ -28,7 +28,14 @@
 [hidden]{display:none!important}
 #login{max-width:360px;margin:12vh auto;display:grid;gap:12px}
 #login input{font:16px var(--sans);padding:10px;border:1px solid var(--rule);background:var(--bg);color:var(--ink)}
-table.pages{border-collapse:collapse;font-size:14px}table.pages td{padding:4px 16px 4px 0}
+
+.tabs{margin:0 0 20px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 32px;margin:20px 0}
+.grid h3{margin:0 0 6px;font-size:16px}
+.kv{width:100%;border-collapse:collapse;font-size:14px}.kv td{padding:4px 0;border-bottom:1px solid var(--rule)}.kv td.n{text-align:right;width:56px}
+.kv .bar{height:6px;background:var(--red);opacity:.35;margin-top:2px}
+.chart i b{position:absolute;left:0;right:0;border-top:2px solid var(--ink)}
+.card small{display:block;font-size:13px;color:var(--mute);margin-top:2px}
 </style>
 </head>
 <body>
@@ -41,14 +48,19 @@ table.pages{border-collapse:collapse;font-size:14px}table.pages td{padding:4px 1
   </form>
   <main id="app" hidden>
     <header><h1>CSLB 备考 · 后台</h1><a class="btn" href="../">回到网站</a><button class="btn" id="reload">刷新</button><button class="btn" id="logout">退出</button></header>
-    <h2>浏览量</h2>
-    <div class="cards" id="cards"></div>
-    <p class="small">最近 30 天每日浏览量（美国中部时间），只统计次数，不记录访客信息。</p>
-    <div class="chart" id="chart"></div><div class="axis" id="axis"></div>
-    <table class="pages" id="pages"></table>
-    <h2>意见</h2>
-    <div class="filters" id="filters"></div>
-    <div id="list"></div>
+    <div class="filters tabs" role="tablist"><button class="chip" data-tab="traffic" role="tab">流量</button><button class="chip" data-tab="fb" role="tab">意见 <small id="fbcount"></small></button></div>
+    <section id="traffic">
+      <div class="cards" id="cards"></div>
+      <h3>最近 30 天</h3>
+      <p class="small">红柱为浏览量，深色线为访客数（美国中部时间）。鼠标移到柱子上看具体数字。</p>
+      <div class="chart" id="chart"></div><div class="axis" id="axis"></div>
+      <div class="grid" id="tables"></div>
+      <p class="small">来源、地区、设备、语言、时段为最近 30 天。访客数按“同一天、同一网络、同一浏览器”去重，只存不可逆的当日哈希，不存 IP，无法跨天追踪个人。来源、地区、设备等明细从 2026-11-23 开始记录。</p>
+    </section>
+    <section id="fb" hidden>
+      <div class="filters" id="filters"></div>
+      <div id="list"></div>
+    </section>
   </main>
 </div>
 <script src="../content/questions.js"></script>
@@ -68,16 +80,32 @@ async function load(){
   try{data=await api('GET')}catch(e){if(e)alert('加载失败，请稍后再试');return}
   sessionStorage.setItem('cslb-admin',pw);$('#login').hidden=true;$('#app').hidden=false;render();
 }
+const PAPER={law:'法律与商务',b:'B 类专业',all:'两门混合','':'未知'};
+const DEV={mobile:'手机',desktop:'电脑',tablet:'平板','':'未知'};
+const REF=k=>k===''?'直接访问 / 书签':k==='internal'?'站内跳转':k;
+const REG=k=>{if(!k)return '未知';const [c,r]=k.split('-');const C={US:'美国',CN:'中国',CA:'加拿大',MX:'墨西哥',TW:'台湾',HK:'香港'}[c]||c;return r?`${C} · ${r}`:C};
+let tab=sessionStorage.getItem('cslb-admin-tab')||'traffic';
+function kv(title,rows,fmt){const tot=rows.reduce((a,r)=>a+r.n,0)||1;
+  return `<div><h3>${title}</h3>${rows.length?`<table class="kv">${rows.map(r=>`<tr><td>${esc(fmt?fmt(r.k):r.k)}<div class="bar" style="width:${r.n/tot*100}%"></div></td><td class="n">${r.n}</td></tr>`).join('')}</table>`:'<p class="small">还没有数据</p>'}</div>`}
 function render(){
-  const pending=data.feedback.filter(f=>f.status==='new').length;
-  $('#cards').innerHTML=[['今天',data.today],['最近 7 天',data.week],['累计',data.total],['待处理意见',pending]].map(([k,v])=>`<div class="card"><b>${v}</b><span>${k}</span></div>`).join('');
-  const byDay=Object.fromEntries(data.days.map(d=>[d.day,d.n])),slots=[];
+  document.querySelectorAll('[data-tab]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.tab===tab);b.onclick=()=>{tab=b.dataset.tab;sessionStorage.setItem('cslb-admin-tab',tab);render()}});
+  $('#traffic').hidden=tab!=='traffic';$('#fb').hidden=tab!=='fb';
+  const pending=data.feedback.filter(f=>f.status==='new').length;$('#fbcount').textContent=pending||'';
+  const v=data.visitors;
+  $('#cards').innerHTML=[['今天',data.today,v.today],['最近 7 天',data.week,v.week],['最近 30 天',data.month,v.month],['累计',data.total,v.total]].map(([k,n,u])=>`<div class="card"><span>${k}</span><b>${n}</b><small>浏览 · 访客 ${u}</small></div>`).join('');
+  const byDay=Object.fromEntries(data.days.map(d=>[d.day,d])),slots=[];
   const today=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Chicago'}));
-  for(let k=29;k>=0;k--){const d=new Date(today);d.setDate(d.getDate()-k);const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');slots.push([key,byDay[key]||0])}
+  for(let k=29;k>=0;k--){const d=new Date(today);d.setDate(d.getDate()-k);const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');const o=byDay[key]||{n:0,v:0};slots.push([key,o.n,o.v||0])}
   const max=Math.max(1,...slots.map(s=>s[1]));
-  $('#chart').innerHTML=slots.map(([d,n])=>`<i class="${n?'':'z'}" style="height:${n/max*100}%" data-t="${d.slice(5)}：${n}"></i>`).join('');
+  $('#chart').innerHTML=slots.map(([d,n,u])=>`<i class="${n?'':'z'}" style="height:${n/max*100}%" data-t="${d.slice(5)}：浏览 ${n} · 访客 ${u}">${n&&u?`<b style="bottom:${u/n*100}%"></b>`:''}</i>`).join('');
   $('#axis').innerHTML=`<span>${slots[0][0].slice(5)}</span><span>今天</span>`;
-  $('#pages').innerHTML=data.pages.map(p=>`<tr><td>${PG[p.page]||esc(p.page)}</td><td>${p.n}</td></tr>`).join('');
+  const hrs=Array.from({length:24},(_,h)=>({k:`${String(h).padStart(2,'0')}:00`,n:(data.hours.find(x=>x.h===h)||{n:0}).n})).filter(r=>r.n);
+  $('#tables').innerHTML=[
+    kv('来源网站',data.refs,REF),kv('地区',data.regions,REG),kv('设备',data.devices,k=>DEV[k]||k),
+    kv('网站语言',data.langs,k=>LANG[k]||'未知'),kv('页面（最近 30 天）',data.pages,k=>PG[k]||k),kv('页面（累计）',data.allPages,k=>PG[k]||k),
+    kv('访问时段（中部时间）',hrs),
+    `<div><h3>模拟考试交卷</h3>${data.exams.length?`<table class="kv"><tr><td class="small">试卷</td><td class="n small">次数</td><td class="n small">平均分</td><td class="n small">通过率</td></tr>${data.exams.map(e=>`<tr><td>${PAPER[e.paper]||e.paper}</td><td class="n">${e.n}</td><td class="n">${e.avg}%</td><td class="n">${e.pass}%</td></tr>`).join('')}</table><p class="small">通过线按 72% 计。</p>`:'<p class="small">还没有人交卷</p>'}</div>`
+  ].join('');
   const cnt=s=>data.feedback.filter(f=>s==='all'||f.status===s).length;
   $('#filters').innerHTML=[['new','待处理'],['done','已处理'],['ignored','忽略'],['all','全部']].map(([k,n])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${n} <small>${cnt(k)}</small></button>`).join('');
   document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;render()});
