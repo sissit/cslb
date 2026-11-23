@@ -19,5 +19,27 @@ export default async function handler(req, res) {
   res.status(200).json({ ok: true });
 }
 
-// 新意见邮件通知：发送方式待定（不用个人 Gmail，也不用公司域名）。在此之前只存进后台。
-async function notify() {}
+// 新意见邮件通知：Resend 自带发件人 onboarding@resend.dev（只能发到 Resend 账户邮箱 FEEDBACK_EMAIL）
+const KIND_ZH = { question: '题目有误', site: '网站问题', idea: '建议' };
+const LANG_ZH = { zh: '中文', en: '英文', es: '西语' };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+async function notify(f) {
+  if (!process.env.RESEND_API_KEY || !process.env.FEEDBACK_EMAIL) return;
+  const rows = [['类型', KIND_ZH[f.kind]], ['题号', f.qid], ['页面', f.page], ['语言', LANG_ZH[f.lang]], ['联系方式', f.contact]]
+    .filter(r => r[1]).map(([k, v]) => `<tr><td style="color:#666;padding:2px 12px 2px 0">${k}</td><td>${esc(v)}</td></tr>`).join('');
+  const html = `<p style="white-space:pre-wrap;font-size:15px">${esc(f.message)}</p><table style="font-size:14px">${rows}</table>
+    <p><a href="https://cslb.vercel.app/admin/">打开后台处理</a></p>`;
+  const reply = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.contact || '') ? f.contact : undefined;
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: 'CSLB 备考 <onboarding@resend.dev>',
+      to: [process.env.FEEDBACK_EMAIL],
+      reply_to: reply,
+      subject: `[CSLB 备考] 新意见：${KIND_ZH[f.kind]}${f.qid ? ' ' + f.qid : ''} #${f.id}`,
+      html,
+    }),
+  });
+  if (!r.ok) throw new Error('resend ' + r.status + ' ' + (await r.text()));
+}
